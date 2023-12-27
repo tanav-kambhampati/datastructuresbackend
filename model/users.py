@@ -59,8 +59,8 @@ class Post(db.Model):
             "id": self.id,
             "userID": self.userID,
             "note": self.note,
-            "image": self.image,
-            "base64": str(file_encode)
+            "image": self.image
+            # "base64": str(file_encode)
         }
 
 
