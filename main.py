@@ -13,7 +13,7 @@ from api.joke import joke_api # Blueprint import api definition
 from api.user import user_api # Blueprint import api definition
 from api.player import player_api
 from api.login import login_api
-
+from api.jwt_auth import jwt_bp
 
 # setup App pages
 from projects.projects import app_projects # Blueprint directory import projects definition
@@ -29,6 +29,7 @@ app.register_blueprint(user_api) # register api routes
 app.register_blueprint(player_api)
 app.register_blueprint(app_projects) # register app pages
 app.register_blueprint(login_api) 
+app.register_blueprint(jwt_bp)
 
 @app.errorhandler(404)  # catch for URL not found
 def page_not_found(e):
