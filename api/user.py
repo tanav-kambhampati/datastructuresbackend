@@ -32,6 +32,7 @@ class UserAPI:
             ''' Avoid garbage in, error checking '''
             # validate name
             name = body.get('name')
+            status = body.get('status')
             if name is None or len(name) < 2:
                 return {'message': f'Name is missing, or is less than 2 characters'}, 400
             # validate uid
@@ -57,6 +58,7 @@ class UserAPI:
             uo = User(name=name, 
                       uid=NewUserId,
                       dob=dob,
+                      status=status,
                       role=role)
 
             
@@ -82,6 +84,18 @@ class UserAPI:
             users = User.query.all()    # read/extract all users from database
             json_ready = [user.read() for user in users]  # prepare output in json
             return jsonify(json_ready)  # jsonify creates Flask response object, more specific to APIs than json.dumps
+        
+        @token_required("Admin")
+        def delete(self, _): # Delete Method
+            body = request.get_json()
+            uid = body.get('uid')
+            user = User.query.filter_by(_uid=uid).first()
+            if user is None:
+                return {'message': f'User {uid} not found'}, 404
+            json = user.read()
+            user.delete() 
+            # 204 is the status code for delete with no json response
+            return f"Deleted user: {json}", 204 # use 200 to test with Postman
     
     class _Security(Resource):
         def post(self):
