@@ -79,13 +79,13 @@ class UserAPI:
             # failure returns error
             return {'message': f'Processed {name}, either a format error or User ID {NewUserId} is duplicate'}, 400
 
-        @token_required(roles="Admin")
+        @token_required("Employer")
         def get(self, current_user): # Read Method
             users = User.query.all()    # read/extract all users from database
             json_ready = [user.read() for user in users]  # prepare output in json
             return jsonify(json_ready)  # jsonify creates Flask response object, more specific to APIs than json.dumps
         
-        @token_required("Admin")
+        @token_required("Employer")
         def delete(self, _): # Delete Method
             body = request.get_json()
             uid = body.get('uid')
@@ -96,6 +96,7 @@ class UserAPI:
             user.delete() 
             # 204 is the status code for delete with no json response
             return f"Deleted user: {json}", 204 # use 200 to test with Postman
+            
     
     class _Security(Resource):
         def post(self):

@@ -4,7 +4,7 @@ from flask import request, abort
 from flask import current_app
 from model.users import User
 
-def token_required(roles=None):
+def token_required(status=None):
     def decorator(f):
         @wraps(f)
         def decorated(*args, **kwargs):
@@ -26,9 +26,9 @@ def token_required(roles=None):
                     }, 401
 
                 # Check if roles are provided and user has the required role
-                if roles and current_user.role not in roles:
+                if status and current_user.status not in status:
                     return {
-                        "message": "Insufficient permissions. Required roles: {}".format(roles),
+                        "message": "Insufficient permissions. Required roles: {}".format(status),
                         "data": None,
                         "error": "Forbidden"
                     }, 403
