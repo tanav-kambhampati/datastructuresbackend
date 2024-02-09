@@ -6,8 +6,6 @@ import json
 
 from __init__ import app, db
 from sqlalchemy.exc import IntegrityError
-from werkzeug.security import generate_field_hash, check_field_hash
-
 
 ''' Tutorial: https://www.sqlalchemy.org/library.html#tutorials, try to get into Python shell and follow along '''
 
@@ -157,23 +155,22 @@ class Job(db.Model):
 
 
 # Builds working data for testing
-def initjobs():
+def initJobs():
     with app.app_context():
         """Create database and tables"""
         db.create_all()
         """Tester data for table"""
-    jobs = [
-        Job(title='Software Engineer', description='Proficient experience in Java', field="Software", _qualification="Master", location="Remote", status="Employer"),
-        Job(title='Web Developer', description='Proficient experience in Node', field="Web", location="Remote", status="Employer"),
-        Job(title='UX Designer', description='Proficient experience in React', field="Software", location="Remote", status="Employer"),
-        Job(title='IT Technician', description='Proficient experience in computers', field="IT", location="On-site", status="Employer")
-    ]
-     
-
-    for job in jobs:
+        jobs = [
+            Job(title='Software Engineer', description='Proficient experience in Java', field="Software", qualification="Master", location="Remote", role="Employer"),
+            Job(title='Web Developer', description='Proficient experience in Node', field="Web", location="Remote", role="Employer"),
+            Job(title='UX Designer', description='Proficient experience in React', field="Software", location="Remote", role="Employer"),
+            Job(title='IT Technician', description='Proficient experience in computers', field="IT", location="On-site", role="Employer")
+        ]
+        
+        for job in jobs:
             try:
                 job.create()
             except IntegrityError:
                 '''fails with bad or duplicate data'''
                 db.session.remove()
-                print(f"Records exist, duplicate email, or error: {job.uid}")
+                print(f"Records exist, duplicate title, or error: {job.title}")
