@@ -12,6 +12,7 @@ from __init__ import app, db, cors  # Definitions initialization
 # setup APIs
 from api.user import user_api # Blueprint import api definition
 from api.player import player_api
+from api.job import job_api
 # database migrations
 from model.users import initUsers
 from model.players import initPlayers
@@ -28,6 +29,7 @@ db.init_app(app)
 app.register_blueprint(jwt_bp)
 app.register_blueprint(user_api) # register api routes
 app.register_blueprint(player_api)
+app.register_blueprint(job_api)
 app.register_blueprint(app_projects) # register app pages
 
 @app.errorhandler(404)  # catch for URL not found

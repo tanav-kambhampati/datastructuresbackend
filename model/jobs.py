@@ -26,17 +26,19 @@ class Job(db.Model):
     _field = db.Column(db.String(255), unique=False, nullable=False)
     _location = db.Column(db.String(255), unique=False, nullable=False)
     _qualification = db.Column(db.String(255), unique=False, nullable=False)
+    _pay = db.Column(db.Integer, unique=False, nullable=False)
     _role = db.Column(db.String(20), default="Unknown", nullable=False)
 
 
     
     # constructor of a job object, initializes the instance variables within object (self)
-    def __init__(self, title, description, field="IT", location="On-site", qualification="Masters", role="Unknown"):
+    def __init__(self, title, description, field="IT", location="On-site", qualification="Masters", pay=1000, role="Unknown"):
         self._title = title    # variables with self prefix become part of the object, 
         self._description = description
         self._field = field
         self._location = location
         self._qualification = qualification
+        self._pay = pay
         self._role = role
 
     # a title getter method, extracts title from object
@@ -94,6 +96,15 @@ class Job(db.Model):
         self._qualification = qualification
         
     @property
+    def pay(self):
+        return self._pay
+    
+    # a setter function, allows title to be updated after initial object creation
+    @pay.setter
+    def pay(self, pay):
+        self._pay = pay
+        
+    @property
     def role(self):
         return self._role
 
@@ -124,6 +135,7 @@ class Job(db.Model):
             "location": self.location,
             "qualification": self._qualification,
             "role": self.role,
+            "pay": self.pay,
             
             # "posts": [post.read() for post in self.posts]
         }
@@ -161,7 +173,7 @@ def initJobs():
         db.create_all()
         """Tester data for table"""
         jobs = [
-            Job(title='Software Engineer', description='Proficient experience in Java', field="Software", qualification="Master", location="Remote", role="Employer"),
+            Job(title='Software Engineer', description='Proficient experience in Java', field="Software", qualification="Master", location="Remote", pay=1000, role="Employer"),
             Job(title='Web Developer', description='Proficient experience in Node', field="Web", location="Remote", role="Employer"),
             Job(title='UX Designer', description='Proficient experience in React', field="Software", location="Remote", role="Employer"),
             Job(title='IT Technician', description='Proficient experience in computers', field="IT", location="On-site", role="Employer")

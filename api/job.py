@@ -7,12 +7,13 @@ from model.users import User
 import random
 from __init__ import app, db, cors
 import flask
+from model.jobs import Job
 
-user_api = Blueprint('user_api', __name__,
-                   url_prefix='/api/users')
+job_api = Blueprint('job_api', __name__,
+                   url_prefix='/api/job')
 
 # API docs https://flask-restful.readthedocs.io/en/latest/api.html
-api = Api(user_api)
+api = Api(job_api)
 
 @app.before_request
 def before_request():
@@ -22,62 +23,40 @@ def before_request():
                           , 'http://127.0.0.1:4100/individualfrontend/']:
         cors._origins = allowed_origin
 
-class UserAPI:        
+class JobAPI:        
     class _CRUD(Resource):  # User API operation for Create, Read.  THe Update, Delete methods need to be implemeented
-        #@token_required()
-        def post(self): # Create method
+        @token_required("Employer")
+        def post(self, current_user): # Create method
             ''' Read data for json body '''
             body = request.get_json()
             
             ''' Avoid garbage in, error checking '''
             # validate name
-            name = body.get('name')
-            status = body.get('status')
-            if name is None or len(name) < 2:
-                return {'message': f'Name is missing, or is less than 2 characters'}, 400
-            # validate uid
-            #uid = body.get('uid')
-            #if uid is None or len(uid) < 2:
-            #    return {'message': f'User ID is missing, or is less than 2 characters'}, 400
-            # look for password and dob
-            role = body.get('role')
-            password = body.get('password')
-            dob = body.get('dob')
-            if dob is not None:
-                try:
-                    dob = datetime.strptime(dob, '%Y-%m-%d').date()
-                except:
-                    return {'message': f'Date of birth format error {dob}, must be yyyy-mm-dd'}, 400
-
-            UserName = body.get('name')[:4]
-            UserId = random.randrange(100, 999)
-            NewUserId = f"{UserName}" + f"{UserId}"
-          
-            
+            title = body.get('title')
+            description = body.get('description')
+            qualification = body.get('qualification')
+            pay = body.get('pay')
+            field = body.get('field')
+            location = body.get('location')
+    
             ''' #1: Key code block, setup USER OBJECT '''
-            uo = User(name=name, 
-                      uid=NewUserId,
-                      dob=dob,
-                      status=status,
-                      role=role)
+            uo = Job(title=title, 
+                      description=description,
+                      qualification=qualification,
+                      pay=pay,
+                      field=field,
+                      location=location)
 
-            
-            ''' Additional garbage error checking '''
-            # set password if provided
-            if password is not None:
-                uo.set_password(password)
-            # convert to date type
-            
-            
+
             ''' #2: Key Code block to add user to database '''
             # create user in database
             user = uo.create()
             # success returns json of user
             if user:
-                return jsonify(NewUserId)
+                return jsonify(title)
 
             # failure returns error
-            return {'message': f'Processed {name}, either a format error or User ID {NewUserId} is duplicate'}, 400
+            return {'message': f'Processed {title}, either a format error or User ID {description} is duplicate'}, 400
 
         @token_required("Employer")
         def get(self, current_user): # Read Method
@@ -126,7 +105,14 @@ class UserAPI:
                             current_app.config["SECRET_KEY"],
                             algorithm="HS256"
                         )
-                        resp = jsonify(user.id)
+                        
+                        resp = jsonify({'message': f"Authentication for %s successful" % (user._uid)})
+                        resp.set_cookie("test", {"_uid": user._uid},
+                                        max_age=3600,
+                                secure=True,
+                                httponly=True,
+                                path='/',
+                                samesite='None')
                         resp.set_cookie("jwt", token,
                                 max_age=3600,
                                 secure=True,
