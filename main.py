@@ -17,6 +17,7 @@ from api.job import job_api
 from model.users import initUsers
 from model.players import initPlayers
 from model.jobs import initJobs
+from model.jobusers import initJobsUsers
 from api.jwt_auth import jwt_bp
 # setup App pages
 from projects.projects import app_projects # Blueprint directory import projects definition
@@ -61,6 +62,7 @@ def generate_data():
     initUsers()
     initPlayers()
     initJobs()
+    initJobsUsers()
 
 # Register the custom command group with the Flask application
 app.cli.add_command(custom_cli)

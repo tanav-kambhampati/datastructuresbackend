@@ -1,7 +1,7 @@
 """ database dependencies to support sqliteDB examples """
-from random import randrange
+
 from datetime import date
-import os, base64
+
 import json
 
 from __init__ import app, db
@@ -21,14 +21,14 @@ class JobUsers(db.Model):
 
     # Define the job schema with "vars" from object
     id = db.Column(db.Integer, primary_key=True)
-    jobid = db.Column(db.Integer)
-    useruid = db.Column(db.Integer)
-    dateApplied = db.Column(db.Date)
+    _jobid = db.Column(db.Integer)
+    _userid = db.Column(db.Integer)
+    _dateApplied = db.Column(db.Date)
 
 
     
     # constructor of a job object, initializes the instance variables within object (self)
-    def __init__(self, title, jobid, userid, dateApplied):
+    def __init__(self, jobid, userid, dateApplied=date.today()):
         self._jobid = jobid
         self._userid = userid
         self._dateApplied = dateApplied
@@ -42,7 +42,7 @@ class JobUsers(db.Model):
     # a setter function, allows jobid to be updated after initial object creation
     @jobid.setter
     def jobid(self, jobid):
-        self._userid = jobid
+        self._jobid = jobid
     
     @property
     def userid(self):
@@ -51,11 +51,12 @@ class JobUsers(db.Model):
     # a setter function, allows userid to be updated after initial object creation
     @userid.setter
     def userid(self, userid):
-        self._title = userid
+        self._userid = userid
 
     @property
     def dateApplied(self):
-        return self._dateApplied.strftime('%m-%d-%Y')
+        dateApplied_string = self._dateApplied.strftime('%m-%d-%Y')
+        return dateApplied_string
     
     # a setter function, allows userid to be updated after initial object creation
     @dateApplied.setter
@@ -123,18 +124,15 @@ class JobUsers(db.Model):
 
 
 # Builds working data for testing
-def initJobs():
+def initJobsUsers():
     with app.app_context():
         """Create database and tables"""
         db.create_all()
         """Tester data for table"""
         jobs = [
-            JobUsers(jobid=1, userid=2, dateApplied=),
-            JobUsers(title='Web Developer', description='Proficient experience in Node', field="Web", location="Remote", role="Employer"),
-            JobUsers(title='UX Designer', description='Proficient experience in React', field="Software", location="Remote", role="Employer"),
-            JobUsers(title='IT Technician', description='Proficient experience in computers', field="IT", location="On-site", role="Employer")
+            JobUsers(jobid=1, userid=2, dateApplied=date(1847, 2, 11)),
+            JobUsers(jobid=2, userid=3, dateApplied=date(2024, 4, 12))
         ]
-        
         for job in jobs:
             try:
                 job.create()
