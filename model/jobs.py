@@ -139,7 +139,7 @@ class Job(db.Model):
             
             # "posts": [post.read() for post in self.posts]
         }
-        
+
 
 
     # CRUD update: updates job title, field, phone

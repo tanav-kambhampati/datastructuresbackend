@@ -8,7 +8,9 @@ import random
 from __init__ import app, db, cors
 import flask
 from model.jobs import Job
-
+from urllib import parse
+from urllib.parse import urlparse
+from urllib.parse import parse_qs
 job_api = Blueprint('job_api', __name__,
                    url_prefix='/api/job')
 
@@ -60,10 +62,27 @@ class JobAPI:
 
         @token_required("Employer")
         def get(self, current_user): # Read Method
-            users = User.query.all()    # read/extract all users from database
-            json_ready = [user.read() for user in users]  # prepare output in json
-            return jsonify(json_ready)  # jsonify creates Flask response object, more specific to APIs than json.dumps
-        
+            print(request.url)
+            frontendrequest = request.url
+            parsed_url = urlparse(frontendrequest)
+            print("parsed_url")
+            print(parsed_url)
+            query_params = parse_qs(parsed_url.query)
+            if 'id' in query_params:
+                query_id = query_params['id'][0]
+                print('query_id')
+                print(query_id)
+                job = Job.query.filter_by(id=query_id).first()
+                if job:
+                    return job.read()
+                else:
+                    return {'message': 'Job not found'}, 404
+            else:
+                jobs = Job.query.all()    # read/extract all users from database
+                json_ready = [job.read() for job in jobs]  # prepare output in json
+                return jsonify(json_ready) # jsonify creates Flask response object, more specific to APIs than json.dumps
+
+                    
         @token_required("Employer")
         def delete(self, _): # Delete Method
             body = request.get_json()
