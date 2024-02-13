@@ -13,11 +13,13 @@ from __init__ import app, db, cors  # Definitions initialization
 from api.user import user_api # Blueprint import api definition
 from api.player import player_api
 from api.job import job_api
+from api.jobuser import jobuser_api
 # database migrations
-from model.users import initUsers
+from model.users import initUsers, initJobsUsers, initJobs
 from model.players import initPlayers
-from model.jobs import initJobs
-from model.jobusers import initJobsUsers
+
+
+from model.companies import initCompanies
 from api.jwt_auth import jwt_bp
 # setup App pages
 from projects.projects import app_projects # Blueprint directory import projects definition
@@ -31,6 +33,7 @@ app.register_blueprint(jwt_bp)
 app.register_blueprint(user_api) # register api routes
 app.register_blueprint(player_api)
 app.register_blueprint(job_api)
+app.register_blueprint(jobuser_api)
 app.register_blueprint(app_projects) # register app pages
 
 @app.errorhandler(404)  # catch for URL not found
@@ -63,6 +66,7 @@ def generate_data():
     initPlayers()
     initJobs()
     initJobsUsers()
+    initCompanies()
 
 # Register the custom command group with the Flask application
 app.cli.add_command(custom_cli)

@@ -70,7 +70,7 @@ def login():
 
    # if the user doesn't exist or the password is wrong, return an error
    if user is None:# or not user.check_password(password):
-       return jsonify({'message': f'Invalid name or password {name}' }), 400
+       return jsonify({'message': f'Invalid name or password {uid}' }), 400
 
    # if the user is authenticated, create a JWT token for them
    token = jwt.encode(payload= {'name': user.name}, key=current_app.config['SECRET_KEY'], algorithm="HS256")
