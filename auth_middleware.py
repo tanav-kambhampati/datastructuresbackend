@@ -28,7 +28,7 @@ def token_required(status=None):
                 # Check if roles are provided and user has the required role
                 if status and current_user.status not in status:
                     return {
-                        "message": "Insufficient permissions. Required status: {}".format(status),
+                        "message": "Insufficient permissions. Required roles: {}".format(status),
                         "data": None,
                         "error": "Forbidden"
                     }, 403

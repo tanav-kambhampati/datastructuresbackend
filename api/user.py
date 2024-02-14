@@ -40,10 +40,14 @@ class UserAPI:
             #if uid is None or len(uid) < 2:
             #    return {'message': f'User ID is missing, or is less than 2 characters'}, 400
             # look for password and dob
-  
+            role = body.get('role')
             password = body.get('password')
-
-          
+            dob = body.get('dob')
+            if dob is not None:
+                try:
+                    dob = datetime.strptime(dob, '%Y-%m-%d').date()
+                except:
+                    return {'message': f'Date of birth format error {dob}, must be yyyy-mm-dd'}, 400
 
             UserName = body.get('name')[:4]
             UserId = random.randrange(100, 999)
@@ -53,7 +57,9 @@ class UserAPI:
             ''' #1: Key code block, setup USER OBJECT '''
             uo = User(name=name, 
                       uid=NewUserId,
-                      status=status,)
+                      dob=dob,
+                      status=status,
+                      role=role)
 
             
             ''' Additional garbage error checking '''
@@ -75,7 +81,7 @@ class UserAPI:
 
         @token_required("Employer")
         def get(self, current_user): # Read Method
-            users = User.query.all()    
+            users = User.query.all()    # read/extract all users from database
             json_ready = [user.read() for user in users]  # prepare output in json
             return jsonify(json_ready)  # jsonify creates Flask response object, more specific to APIs than json.dumps
         
@@ -93,7 +99,6 @@ class UserAPI:
             
     
     class _Security(Resource):
-        
         def post(self):
             try:
                 body = request.get_json()
@@ -117,9 +122,7 @@ class UserAPI:
                     try:
                         token = jwt.encode(
                             {"_uid": user._uid,
-                             "id": user.id,
-                             "name": user.name,
-                            "status": user.status},
+                            "role": user.role},
                             current_app.config["SECRET_KEY"],
                             algorithm="HS256"
                         )
@@ -134,7 +137,6 @@ class UserAPI:
                                 # domain="frontend.com"
                                 )
                         return resp
-                        
                     except Exception as e:
                         return {
                             "error": "Something went wrong",
@@ -152,10 +154,8 @@ class UserAPI:
                         "data": None
                 }, 500
 
-
             
     # building RESTapi endpoint
     api.add_resource(_CRUD, '/')
     api.add_resource(_Security, '/authenticate')
-
     

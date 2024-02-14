@@ -13,14 +13,13 @@ from __init__ import app, db, cors  # Definitions initialization
 from api.user import user_api # Blueprint import api definition
 from api.player import player_api
 from api.job import job_api
-from api.jobuser import jobuser_api
 # database migrations
-from model.users import initUsers, initJobsUsers, initJobs
+from model.users import initUsers
 from model.players import initPlayers
-
-
-from model.companies import initCompanies
+from model.jobs import initJobs
+from model.jobusers import initJobsUsers
 from api.jwt_auth import jwt_bp
+from api.jobuser import jobuser_api
 # setup App pages
 from projects.projects import app_projects # Blueprint directory import projects definition
 
@@ -66,7 +65,6 @@ def generate_data():
     initPlayers()
     initJobs()
     initJobsUsers()
-    initCompanies()
 
 # Register the custom command group with the Flask application
 app.cli.add_command(custom_cli)

@@ -11,243 +11,58 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 ''' Tutorial: https://www.sqlalchemy.org/library.html#tutorials, try to get into Python shell and follow along '''
 
-class Job(db.Model):
-    __tablename__ = 'jobs'  # table title is plural, class title is singular
+# Define the Post class to manage actions in 'posts' table,  with a relationship to 'users' table
+class Post(db.Model):
+    __tablename__ = 'posts'
 
-    # Define the job schema with "vars" from object
+    # Define the Notes schema
     id = db.Column(db.Integer, primary_key=True)
-    _title = db.Column(db.String(255), unique=False, nullable=False)
-    _description = db.Column(db.String(255), unique=False, nullable=False)
-    _field = db.Column(db.String(255), unique=False, nullable=False)
-    _location = db.Column(db.String(255), unique=False, nullable=False)
-    _qualification = db.Column(db.String(255), unique=False, nullable=False)
-    _pay = db.Column(db.Integer, unique=False, nullable=False)
-    _role = db.Column(db.String(20), default="Unknown", nullable=False)
+    note = db.Column(db.Text, unique=False, nullable=False)
+    image = db.Column(db.String, unique=False)
+    # Define a relationship in Notes Schema to userID who originates the note, many-to-one (many notes to one user)
+    userID = db.Column(db.Integer, db.ForeignKey('users.id'))
 
+    # Constructor of a Notes object, initializes of instance variables within object
+    def __init__(self, id, note, image):
+        self.userID = id
+        self.note = note
+        self.image = image
 
-    
-    # constructor of a job object, initializes the instance variables within object (self)
-    def __init__(self, title, description, field="IT", location="On-site", qualification="Masters", pay=1000, role="Unknown"):
-        self._title = title    # variables with self prefix become part of the object, 
-        self._description = description
-        self._field = field
-        self._location = location
-        self._qualification = qualification
-        self._pay = pay
-        self._role = role
+    # Returns a string representation of the Notes object, similar to java toString()
+    # returns string
+    def __repr__(self):
+        return "Notes(" + str(self.id) + "," + self.note + "," + str(self.userID) + ")"
 
-    
-    # output content using str(object) in human readable form, uses getter
-    # output content using json dumps, this is ready for API response
-    @property
-    def title(self):
-        return self._title
-    
-    # a setter function, allows title to be updated after initial object creation
-    @title.setter
-    def title(self, title):
-        self._title = title
-
-    
-    # a getter method, extracts email from object
-    @property
-    def description(self):
-        return self._description
-    
-    # a setter function, allows title to be updated after initial object creation
-    @description.setter
-    def description(self, description):
-        self._description = description
-    
-    @property
-    def field(self):
-        return self._field
-
-    @field.setter
-    def field(self, field):
-        self._field = field
-        
-    # location property is returned as string, to avoid unfriendly outcomes
-    @property
-    def location(self):
-        return self._location
-
-    # location should be have verification for type date
-    @location.setter
-    def location(self, location):
-        self._location = location
-
-    
-    # output content using str(object) in human readable form, uses getter
-    # output content using json dumps, this is ready for API response
-    def __str__(self):
-        return json.dumps(self.read())
-   
-    # qualification is used to store python dictionary data 
-    @property
-    def qualification(self):
-        return self._qualification
-    
-    @qualification.setter
-    def qualification(self, qualification):
-        self._qualification = qualification
-        
-    @property
-    def pay(self):
-        return self._pay
-    
-    # a setter function, allows title to be updated after initial object creation
-    @pay.setter
-    def pay(self, pay):
-        self._pay = pay
-        
-    @property
-    def role(self):
-        return self._role
-
-    @role.setter
-    def role(self, role):
-        self._role = role
-
-    # CRUD create/add a new record to the table
-    # returns self or None on error
+    # CRUD create, adds a new record to the Notes table
+    # returns the object added or None in case of an error
     def create(self):
         try:
-            # creates a person object from job(db.Model) class, passes initializers
-            db.session.add(self)  # add prepares to persist person object to jobs table
+            # creates a Notes object from Notes(db.Model) class, passes initializers
+            db.session.add(self)  # add prepares to persist person object to Notes table
             db.session.commit()  # SqlAlchemy "unit of work pattern" requires a manual commit
             return self
         except IntegrityError:
             db.session.remove()
             return None
 
-    # CRUD read converts self to dictionary
+    # CRUD read, returns dictionary representation of Notes object
     # returns dictionary
     def read(self):
-        return {
-            "id": self.id,
-
-            # "posts": [post.read() for post in self.posts]
-        }
-
-    # CRUD update: updates job title, field, phone
-    # returns self
-    def update(self, title="", description="", field=""):
-        """only updates values with length"""
-        if len(title) > 0:
-            self.title = title
-        if len(description) > 0:
-            self.description = description
-        if len(field) > 0:
-            self.set_field(field)
-        db.session.commit()
-        return self
-
-    # CRUD delete: remove self
-    # None
-    def delete(self):
-        db.session.delete(self)
-        db.session.commit()
-        return None
-
-
-
-
-class JobUsers(db.Model):
-    __tablename__ = 'jobsusers'  # table title is plural, class title is singular
-
-    # Define the job schema with "vars" from object
-    id = db.Column(db.Integer, primary_key=True)
-    _jobid = db.Column(db.Integer, db.ForeignKey('jobs.id'))
-    _userid = db.Column(db.Integer, db.ForeignKey('users.id'))
-    _dateApplied = db.Column(db.Date)
-    
-    jobid = db.relationship("Job", cascade='all, delete', backref='jobsusers', lazy=True)
-
-    
-    # constructor of a job object, initializes the instance variables within object (self)
-    def __init__(self, jobid, userid, dateApplied=date.today()):
-        self._jobid = jobid
-        self._userid = userid
-        self._dateApplied = dateApplied
-       
-    @property
-    def jobid(self):
-        return self._jobid
-    
-    # a setter function, allows jobid to be updated after initial object creation
-    @jobid.setter
-    def jobid(self, jobid):
-        self._jobid = jobid
-    
-    @property
-    def userid(self):
-        return self._userid
-    
-    # a setter function, allows userid to be updated after initial object creation
-    @userid.setter
-    def userid(self, userid):
-        self._userid = userid
-
-    @property
-    def dateApplied(self):
-        dateApplied_string = self._dateApplied.strftime('%m-%d-%Y')
-        return dateApplied_string
-    
-    # a setter function, allows userid to be updated after initial object creation
-    @dateApplied.setter
-    def dateApplied(self, dateApplied):
-        self._dateApplied = dateApplied
-
-    def __str__(self):
-        return json.dumps(self.read())
-   
-    # qualification is used to store python dictionary data 
-
-    # CRUD create/add a new record to the table
-    # returns self or None on error
-    def create(self):
-        try:
-            # creates a person object from job(db.Model) class, passes initializers
-            db.session.add(self)  # add prepares to persist person object to jobs table
-            db.session.commit()  # SqlAlchemy "unit of work pattern" requires a manual commit
-            return self
-        except IntegrityError:
-            db.session.remove()
-            return None
-
-    # CRUD read converts self to dictionary
-    # returns dictionary
-    def read(self):
-        return {
-            "id": self.id,
-            "jobid": self.jobid,
-            "userid": self.userid,
-            "dateApplied": self.dateApplied,
-            
-        }
+        # encode image
+        path = app.config['UPLOAD_FOLDER']
+        file = os.path.join(path, self.image)
+        file_text = open(file, 'rb')
+        file_read = file_text.read()
+        file_encode = base64.encodebytes(file_read)
         
+        return {
+            "id": self.id,
+            "userID": self.userID,
+            "note": self.note,
+            "image": self.image,
+            "base64": str(file_encode)
+        }
 
-
-    # CRUD update: updates job title, field, phone
-    # returns self
-    def update(self, title="", description="", field=""):
-        """only updates values with length"""
-        if len(title) > 0:
-            self.title = title
-        if len(description) > 0:
-            self.description = description
-        if len(field) > 0:
-            self.set_field(field)
-        db.session.commit()
-        return self
-
-    # CRUD delete: remove self
-    # None
-    def delete(self):
-        db.session.delete(self)
-        db.session.commit()
-        return None
 
 # Define the User class to manage actions in the 'users' table
 # -- Object Relational Mapping (ORM) is the key concept of SQLAlchemy
@@ -268,7 +83,7 @@ class User(db.Model):
     _role = db.Column(db.String(20), default="User", nullable=False)
 
     # Defines a relationship between User record and Notes table, one-to-many (one user to many notes)
-    jobsusers = db.relationship("JobUsers", cascade='all, delete', backref='users', lazy=True)
+    posts = db.relationship("Post", cascade='all, delete', backref='users', lazy=True)
 
     # constructor of a User object, initializes the instance variables within object (self)
     def __init__(self, name, uid, password="123qwerty", dob=date.today(), status="unknown", hashmap={}, role="User"):
@@ -392,7 +207,7 @@ class User(db.Model):
             "status": self.status,
             "age": self.age,
             "hashmap": self._hashmap,
-            "jobsusers": [jobusers.read() for jobusers in self.jobsusers]
+            # "posts": [post.read() for post in self.posts]
         }
 
     # CRUD update: updates user name, password, phone
@@ -434,48 +249,14 @@ def initUsers():
         """Builds sample user/note(s) data"""
         for user in users:
             try:
-                user.jobsusers.append(JobUsers(userid=user.id, jobid=1))
+                '''add a few 1 to 4 notes per user'''
+                for num in range(randrange(1, 4)):
+                    note = "#### " + user.name + " note " + str(num) + ". \n Generated by test data."
+                    user.posts.append(Post(id=user.id, note=note, image='ncs_logo.png'))
                 '''add user/post data to table'''
                 user.create()
             except IntegrityError:
                 '''fails with bad or duplicate data'''
                 db.session.remove()
                 print(f"Records exist, duplicate email, or error: {user.uid}")
-
-def initJobsUsers():
-    with app.app_context():
-        """Create database and tables"""
-        db.create_all()
-        """Tester data for table"""
-        jobs = [
-            JobUsers(jobid=1, userid=2, dateApplied=date(1847, 2, 11)),
-            JobUsers(jobid=2, userid=3, dateApplied=date(2024, 4, 12))
-        ]
-        for job in jobs:
-            try:
-                job.create()
-            except IntegrityError:
-                '''fails with bad or duplicate data'''
-                db.session.remove()
-                print(f"Records exist, duplicate title, or error: {job.title}")
-
             
-def initJobs():
-    with app.app_context():
-        """Create database and tables"""
-        db.create_all()
-        """Tester data for table"""
-        jobs = [
-            Job(title='Software Engineer', description='Proficient experience in Java', field="Software", qualification="Master", location="Remote", pay=1000, role="Employer"),
-            Job(title='Web Developer', description='Proficient experience in Node', field="Web", location="Remote", role="Employer"),
-            Job(title='UX Designer', description='Proficient experience in React', field="Software", location="Remote", role="Employer"),
-            Job(title='IT Technician', description='Proficient experience in computers', field="IT", location="On-site", role="Employer")
-        ]
-        
-        for job in jobs:
-            try:
-                job.create()
-            except IntegrityError:
-                '''fails with bad or duplicate data'''
-                db.session.remove()
-                print(f"Records exist, duplicate title, or error: {job.title}")

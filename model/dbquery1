@@ -1,7 +1,0 @@
--- database: /Users/aidanlau/Downloads/vscode/cptprojectbackend/instance/volumes/sqlite.db
-
--- Use the ▷ button in the top right corner to run the entire file.
-
-SELECT jobsusers.id AS jobsusers_id, jobsusers._jobid AS jobsusers__jobid, jobsusers._userid AS jobsusers__userid, jobsusers."_dateApplied" AS "jobsusers__dateApplied", jobs.id AS jobs_id, jobs._title AS jobs__title, jobs._description AS jobs__description, jobs._field AS jobs__field, jobs._location AS jobs__location, jobs._qualification AS jobs__qualification, jobs._pay AS jobs__pay, jobs._role AS jobs__role 
-FROM jobsusers, jobs 
-WHERE jobs.id = 3

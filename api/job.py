@@ -7,7 +7,7 @@ from model.users import User
 import random
 from __init__ import app, db, cors
 import flask
-from model.users import Job
+from model.jobs import Job
 from urllib import parse
 from urllib.parse import urlparse
 from urllib.parse import parse_qs
@@ -97,6 +97,9 @@ class JobAPI:
             
     
     class _Security(Resource):
+        @token_required("Employer")
+        def get(self):
+            return jsonify('authorized')
         def post(self):
             try:
                 body = request.get_json()
