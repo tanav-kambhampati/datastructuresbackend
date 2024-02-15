@@ -22,7 +22,6 @@ class Job(db.Model):
     # Define the job schema with "vars" from object
     id = db.Column(db.Integer, primary_key=True)
     _title = db.Column(db.String(255), unique=False, nullable=False)
-    _company = db.Column(db.String(255), unique=False, nullable=False)
     _description = db.Column(db.String(255), unique=False, nullable=False)
     _field = db.Column(db.String(255), unique=False, nullable=False)
     _location = db.Column(db.String(255), unique=False, nullable=False)
@@ -33,9 +32,8 @@ class Job(db.Model):
 
     
     # constructor of a job object, initializes the instance variables within object (self)
-    def __init__(self, title, company, description, field="IT", location="On-site", qualification="Masters", pay=1000, role="Unknown"):
+    def __init__(self, title, description, field="IT", location="On-site", qualification="Masters", pay=1000, role="Unknown"):
         self._title = title    # variables with self prefix become part of the object, 
-        self.company = company
         self._description = description
         self._field = field
         self._location = location
