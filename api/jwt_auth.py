@@ -2,8 +2,7 @@ from flask import Blueprint, render_template, redirect, url_for, request, jsonif
 from flask_login import login_required, logout_user, login_user
 from functools import wraps
 from http import cookies
-import bcrypt
-from bcrypt import gensalt
+
 from model.users import db
 from flask import current_app
 from __init__ import app, db, cors
@@ -45,14 +44,14 @@ def register():
 
 
    # If a user was not found, the password is hashed using bcrypt
-   hashed_password = bcrypt.hashpw(data.get('password').encode('utf-8'), bcrypt.gensalt()).decode('utf-8')  # ensure the hashed password is in string format
+  # hashed_password = bcrypt.hashpw(data.get('password').encode('utf-8'), bcrypt.gensalt()).decode('utf-8')  # ensure the hashed password is in string format
    # A new User object is created with the provided name and hashed password
    UserName = data.get('name')[:4]
    UserId = random(0,100)
    NewUserId = f"{UserName}" + f"{UserId}"
-   new_user = User(name=data.get('name'), password=hashed_password, uid=NewUserId)
+   #new_user = User(name=data.get('name'), password=hashed_password, uid=NewUserId)
    # The new User object is added to the db session
-   db.session.add(new_user)
+  # db.session.add(new_user)
    # The db session is committed to save the changes
    db.session.commit()
    # A JSON response is returned with a message and a 201 status code
