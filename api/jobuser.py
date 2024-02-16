@@ -111,10 +111,28 @@ class JobUserAPI:
                 jobs = Job.query.all()    # read/extract all users from database
                 json_ready = [job.read() for job in jobs]  # prepare output in json
                 return jsonify(json_ready)
-            
+    class _trackApplicant(Resource):
+        def post(self):
+            frontendrequest = request.url
+            parsed_url = urlparse(frontendrequest)
+            query_params = parse_qs(parsed_url.query)
+            if 'id' in query_params:
+                query_id = query_params['id'][0]
+                
+                job = JobUsers.query.filter_by(id=query_id).first()
+                if job:
+                    json_ready = [jobs.read() for jobs in job]  # prepare output in json
+                    return jsonify(json_ready)
+                else:
+                    return {'message': 'Job not found'}, 404
+            else:
+                jobs = Job.query.all()    # read/extract all users from database
+                json_ready = [job.read() for job in jobs]  # prepare output in json
+                return jsonify(json_ready) # jsonify creates Flask response object, more specific to APIs than json.dumps
 
             
     # building RESTapi endpoint
     api.add_resource(_CRUD, '/')
     api.add_resource(_ApplyCount, '/applycount')
+    api.add_resource(_trackApplicant, '/trackapplicant')
     
