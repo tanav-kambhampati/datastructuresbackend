@@ -60,7 +60,7 @@ class JobAPI:
             # failure returns error
             return {'message': f'Processed {title}, either a format error or User ID {description} is duplicate'}, 400
 
-   
+        # this method is when users click on specific job(say "IT Help"), and it will return information about it
         def get(self): # Read Method
             print(request.url)
             frontendrequest = request.url

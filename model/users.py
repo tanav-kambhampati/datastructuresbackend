@@ -146,7 +146,7 @@ class User(db.Model):
     # dob property is returned as string, to avoid unfriendly outcomes
     @property
     def dob(self):
-        dob_string = self._dob.strftime('%m-%d-%Y')
+        dob_string = self._dob
         return dob_string
     
     # dob should be have verification for type date
@@ -154,10 +154,7 @@ class User(db.Model):
     def dob(self, dob):
         self._dob = dob
     
-    @property
-    def age(self):
-        today = date.today()
-        return today.year - self._dob.year - ((today.month, today.day) < (self._dob.month, self._dob.day))
+
     
     # output content using str(object) in human readable form, uses getter
     # output content using json dumps, this is ready for API response
@@ -205,7 +202,7 @@ class User(db.Model):
             "uid": self.uid,
             "dob": self.dob,
             "status": self.status,
-            "age": self.age,
+    
             "hashmap": self._hashmap,
             # "posts": [post.read() for post in self.posts]
         }
