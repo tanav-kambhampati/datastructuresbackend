@@ -192,3 +192,6 @@ def initJobs():
                 '''fails with bad or duplicate data'''
                 db.session.remove()
                 print(f"Records exist, duplicate title, or error: {job.title}")
+
+if __name__ == '__main__':
+    initJobs()
