@@ -18,7 +18,7 @@ from model.users import initUsers
 from model.players import initPlayers
 from model.jobs import initJobs
 from model.jobusers import initJobsUsers
-from api.jwt_auth import jwt_bp
+
 from api.jobuser import jobuser_api
 # setup App pages
 from projects.projects import app_projects # Blueprint directory import projects definition
@@ -28,7 +28,7 @@ from projects.projects import app_projects # Blueprint directory import projects
 db.init_app(app)
 
 # register URIs
-app.register_blueprint(jwt_bp)
+
 app.register_blueprint(user_api) # register api routes
 app.register_blueprint(player_api)
 app.register_blueprint(job_api)
