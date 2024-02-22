@@ -2,8 +2,6 @@ from flask import Flask
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
-from model.jobs import Job
-from model.jobusers import JobUsers
 import os
 
 """
@@ -30,5 +28,3 @@ app.config['MAX_CONTENT_LENGTH'] = 5 * 1024 * 1024  # maximum size of uploaded c
 app.config['UPLOAD_EXTENSIONS'] = ['.jpg', '.png', '.gif']  # supported file types
 app.config['UPLOAD_FOLDER'] = 'volumes/uploads/'  # location of user uploaded content
 
-with app.app_context():
-    db.create_all()
