@@ -51,7 +51,7 @@ def index():
 def table():
     return render_template("table.html")
     
-
+'''
 @app.before_request
 def before_request(response):
     response.headers.add('Access-Control-Allow-Origin', 'http://127.0.0.1:4100/joblyFrontend/')
@@ -66,9 +66,15 @@ def before_request(response):
     response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
     response.headers.add('Access-Control-Allow-Credentials', 'true')
     return response
+'''
 
 
-
+@app.before_request
+def before_request():
+    # Check if the request came from a specific origin
+    allowed_origin = request.headers.get('Origin')
+    if allowed_origin in ['http://127.0.0.1:4100/joblyFrontend/', 'https://aidanlau10.github.io/joblyFrontend/', 'https://aidanlau10.github.io/']:
+        cors._origins = allowed_origin
 
 # Create an AppGroup for custom commands
 custom_cli = AppGroup('custom', help='Custom commands')
