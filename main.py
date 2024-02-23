@@ -3,7 +3,7 @@ from flask.cli import AppGroup
 
 
 # import "packages" from "this" project
-from __init__ import app, db, cors  # Definitions initialization
+from __init__ import app, db  # Definitions initialization
 
 
 # setup APIs
