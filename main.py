@@ -54,8 +54,8 @@ def table():
 
 @app.before_request
 def before_request(response):
-    response.headers.add('Access-Control-Allow-Origin', 'http://localhost:8080')
-    allowed_origins = ['http://localhost:4100', 'http://127.0.0.1:4100', 'https://aidanlau10.github.io/joblyFrontend/', 'https://aidanlau10.github.io/joblyFrontend/']
+    response.headers.add('Access-Control-Allow-Origin', 'http://127.0.0.1:4100/joblyFrontend/')
+    allowed_origins = ['http://localhost:4100', 'http://127.0.0.1:4100/joblyFrontend/', 'https://aidanlau10.github.io/joblyFrontend/', 'https://aidanlau10.github.io/joblyFrontend/']
 
     origin = request.headers.get('Origin')
     if origin and origin in allowed_origins:
