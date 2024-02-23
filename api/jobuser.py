@@ -18,8 +18,8 @@ jobuser_api = Blueprint('jobuser_api', __name__,
 # API docs https://flask-restful.readthedocs.io/en/latest/api.html
 api = Api(jobuser_api)
 
-@app.before_request
-def before_request(response):
+@app.after_request
+def after_request(response):
     response.headers.add('Access-Control-Allow-Origin', 'http://127.0.0.1:4100/joblyFrontend/')
     allowed_origins = ['http://localhost:4100', 'http://127.0.0.1:4100/joblyFrontend/', 'https://aidanlau10.github.io/joblyFrontend/', 'https://aidanlau10.github.io/joblyFrontend/']
 

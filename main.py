@@ -51,9 +51,9 @@ def index():
 def table():
     return render_template("table.html")
     
-'''
-@app.before_request
-def before_request(response):
+
+@app.after_request
+def after_request(response):
     response.headers.add('Access-Control-Allow-Origin', 'http://127.0.0.1:4100/joblyFrontend/')
     allowed_origins = ['http://localhost:4100', 'http://127.0.0.1:4100/joblyFrontend/', 'https://aidanlau10.github.io/joblyFrontend/', 'https://aidanlau10.github.io/joblyFrontend/']
 
@@ -66,7 +66,7 @@ def before_request(response):
     response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
     response.headers.add('Access-Control-Allow-Credentials', 'true')
     return response
-'''
+
 
 
 
