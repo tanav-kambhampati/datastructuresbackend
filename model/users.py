@@ -59,8 +59,8 @@ class Post(db.Model):
             "id": self.id,
             "userID": self.userID,
             "note": self.note,
-            "image": self.image
-            # "base64": str(file_encode)
+            "image": self.image,
+            "base64": str(file_encode)
         }
 
 
@@ -78,16 +78,22 @@ class User(db.Model):
     _uid = db.Column(db.String(255), unique=True, nullable=False)
     _password = db.Column(db.String(255), unique=False, nullable=False)
     _dob = db.Column(db.Date)
+    _status = db.Column(db.String(20), unique=False, nullable=False)
+    _hashmap = db.Column(db.JSON, unique=False, nullable=True)
+    _role = db.Column(db.String(20), default="User", nullable=False)
 
     # Defines a relationship between User record and Notes table, one-to-many (one user to many notes)
     posts = db.relationship("Post", cascade='all, delete', backref='users', lazy=True)
 
     # constructor of a User object, initializes the instance variables within object (self)
-    def __init__(self, name, uid, password="123qwerty", dob=date.today()):
+    def __init__(self, name, uid, password="123qwerty", dob=date.today(), status="unknown", hashmap={}, role="User"):
         self._name = name    # variables with self prefix become part of the object, 
         self._uid = uid
         self.set_password(password)
         self._dob = dob
+        self._status = status
+        self._hashmap = hashmap
+        self._role = role
 
     # a name getter method, extracts name from object
     @property
@@ -98,6 +104,15 @@ class User(db.Model):
     @name.setter
     def name(self, name):
         self._name = name
+    
+    @property
+    def status(self):
+        return self._status
+    
+    # a setter function, allows name to be updated after initial object creation
+    @status.setter
+    def status(self, status):
+        self._status = status
     
     # a getter method, extracts email from object
     @property
@@ -131,7 +146,7 @@ class User(db.Model):
     # dob property is returned as string, to avoid unfriendly outcomes
     @property
     def dob(self):
-        dob_string = self._dob.strftime('%m-%d-%Y')
+        dob_string = self._dob
         return dob_string
     
     # dob should be have verification for type date
@@ -139,15 +154,32 @@ class User(db.Model):
     def dob(self, dob):
         self._dob = dob
     
-    @property
-    def age(self):
-        today = date.today()
-        return today.year - self._dob.year - ((today.month, today.day) < (self._dob.month, self._dob.day))
+
     
     # output content using str(object) in human readable form, uses getter
     # output content using json dumps, this is ready for API response
     def __str__(self):
         return json.dumps(self.read())
+   
+    # hashmap is used to store python dictionary data 
+    @property
+    def hashmap(self):
+        return self._hashmap
+    
+    @hashmap.setter
+    def hashmap(self, hashmap):
+        self._hashmap = hashmap
+        
+    @property
+    def role(self):
+        return self._role
+
+    @role.setter
+    def role(self, role):
+        self._role = role
+
+    def is_admin(self):
+        return self._role == "Admin"
 
     # CRUD create/add a new record to the table
     # returns self or None on error
@@ -169,8 +201,10 @@ class User(db.Model):
             "name": self.name,
             "uid": self.uid,
             "dob": self.dob,
-            "age": self.age,
-            "posts": [post.read() for post in self.posts]
+            "status": self.status,
+    
+            "hashmap": self._hashmap,
+            # "posts": [post.read() for post in self.posts]
         }
 
     # CRUD update: updates user name, password, phone
@@ -203,11 +237,10 @@ def initUsers():
         """Create database and tables"""
         db.create_all()
         """Tester data for table"""
-        u1 = User(name='Thomas Edison', uid='toby', password='123toby', dob=date(1847, 2, 11))
-        u2 = User(name='Nicholas Tesla', uid='niko', password='123niko', dob=date(1856, 7, 10))
-        u3 = User(name='Alexander Graham Bell', uid='lex')
-        u4 = User(name='Grace Hopper', uid='hop', password='123hop', dob=date(1906, 12, 9))
-
+        u1 = User(name='Thomas Edison', uid='toby', password='123toby', dob=date(1847, 2, 11), status="Employer", hashmap={"job": "inventor", "company": "GE", "jobtitle": "Marketing", "description": "Created ads", "duration": "2 years"}, role="Admin")
+        u2 = User(name='Nicholas Tesla', uid='niko', password='123niko', dob=date(1856, 7, 10), hashmap={"job": "inventor", "company": "Tesla"})
+        u3 = User(name='Alexander Graham Bell', uid='lex', hashmap={"job": "inventor", "company": "ATT"})
+        u4 = User(name='Grace Hopper', uid='hop', password='123hop', dob=date(1906, 12, 9), hashmap={"job": "inventor", "company": "Navy"})
         users = [u1, u2, u3, u4]
 
         """Builds sample user/note(s) data"""
