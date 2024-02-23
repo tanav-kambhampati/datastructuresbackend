@@ -51,7 +51,7 @@ def index():
 def table():
     return render_template("table.html")
     
-
+'''
 @app.before_request
 def before_request(response):
     response.headers.add('Access-Control-Allow-Origin', 'http://127.0.0.1:4100/joblyFrontend/')
@@ -66,7 +66,7 @@ def before_request(response):
     response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
     response.headers.add('Access-Control-Allow-Credentials', 'true')
     return response
-
+'''
 
 
 
