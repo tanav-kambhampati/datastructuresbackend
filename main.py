@@ -3,7 +3,7 @@ from flask.cli import AppGroup
 
 
 # import "packages" from "this" project
-from __init__ import app, db  # Definitions initialization
+from __init__ import app, db, cors  # Definitions initialization
 
 
 # setup APIs
@@ -51,11 +51,12 @@ def index():
 def table():
     return render_template("table.html")
 
-'''
+
 @app.before_request
 def before_request():
+    # Check if the request came from a specific origin
     allowed_origin = request.headers.get('Origin')
-    if allowed_origin in ['http://localhost:4100', 'http://127.0.0.1:4100', 'https://nighthawkcoders.github.io', 'https://real-estate-analyzation.github.io']:
+    if allowed_origin in ['http://localhost:4100', 'http://127.0.0.1:4100', 'https://nighthawkcoders.github.io', 'http://127.0.0.1:4100/joblyFrontend/', 'https://aidanlau10.github.io/joblyFrontend/']:
         cors._origins = allowed_origin
     
 
@@ -73,7 +74,7 @@ def after_request(response):
     response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
     response.headers.add('Access-Control-Allow-Credentials', 'true')
     return response
-'''
+
 
 # Create an AppGroup for custom commands
 custom_cli = AppGroup('custom', help='Custom commands')
