@@ -21,7 +21,9 @@ api = Api(job_api)
 def before_request():
     # Check if the request came from a specific origin
     allowed_origin = request.headers.get('Origin')
-    if allowed_origin in ['http://127.0.0.1:4100/joblyFrontend/', 'https://aidanlau10.github.io/joblyFrontend/', 'https://aidanlau10.github.io/']:
+    if allowed_origin in ['http://127.0.0.1:4100/joblyFrontend/', 'http://localhost:4100/joblyFrontend/', 'https://aidanlau10.github.io/joblyFrontend/', 
+                          'https://aidanlau10.github.io/', 'http://127.0.0.1:4100/joblyFrontend/jobs/', 'http://localhost:4100/joblyFrontend/jobs/',
+                          'https://aidanlau10.github.io/joblyFrontend/jobs/']:
         cors._origins = allowed_origin
 class JobAPI:        
     class _CRUD(Resource):  # User API operation for Create, Read.  THe Update, Delete methods need to be implemeented
