@@ -23,7 +23,11 @@ from api.jobuser import jobuser_api
 # setup App pages
 from projects.projects import app_projects # Blueprint directory import projects definition
 
-
+with app.app_context():
+    initUsers()
+    initPlayers()
+    initJobs()
+    initJobsUsers()
 # Initialize the SQLAlchemy object to work with the Flask app instance
 db.init_app(app)
 
