@@ -52,8 +52,8 @@ def table():
     return render_template("table.html")
     
 
-@app.after_request
-def after_request(response):
+@app.before_request
+def before_request(response):
     response.headers.add('Access-Control-Allow-Origin', 'http://localhost:8080')
     allowed_origins = ['http://localhost:4100', 'http://127.0.0.1:4100', 'https://aidanlau10.github.io/joblyFrontend/', 'https://aidanlau10.github.io/joblyFrontend/']
 
