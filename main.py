@@ -78,7 +78,7 @@ def before_request(response):
                           'https://aidanlau10.github.io/joblyFrontend/jobs/', 'http://127.0.0.1:4100']:
         cors._origins = allowed_origin
       
-        response.headers['Access-Control-Allow-Origin'] = request_origin
+        response.headers['Access-Control-Allow-Origin'] = allowed_origin
         response.headers['Access-Control-Allow-Credentials'] = 'true'
     return response
 
