@@ -68,24 +68,16 @@ def after_request(response):
     return response
 '''
 
-'''
+
 @app.before_request
-def before_request():
+def before_request(response):
     # Check if the request came from a specific origin
     allowed_origin = request.headers.get('Origin')
     if allowed_origin in ['http://127.0.0.1:4100/joblyFrontend/', 'http://localhost:4100/joblyFrontend/', 'https://aidanlau10.github.io/joblyFrontend/', 
                           'https://aidanlau10.github.io/', 'http://127.0.0.1:4100/joblyFrontend/jobs/', 'http://localhost:4100/joblyFrontend/jobs/',
                           'https://aidanlau10.github.io/joblyFrontend/jobs/', 'http://127.0.0.1:4100']:
         cors._origins = allowed_origin
-'''        
-        
-@app.after_request
-def after_request(response):
-
-    request_origin = request.headers.get('Origin')
-    if request_origin in ['http://127.0.0.1:4100/joblyFrontend/', 'http://localhost:4100/joblyFrontend/', 'https://aidanlau10.github.io/joblyFrontend/', 
-                          'https://aidanlau10.github.io/', 'http://127.0.0.1:4100/joblyFrontend/jobs/', 'http://localhost:4100/joblyFrontend/jobs/',
-                          'https://aidanlau10.github.io/joblyFrontend/jobs/', 'http://127.0.0.1:4100']:
+      
         response.headers['Access-Control-Allow-Origin'] = request_origin
         response.headers['Access-Control-Allow-Credentials'] = 'true'
     return response
