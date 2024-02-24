@@ -17,7 +17,7 @@ job_api = Blueprint('job_api', __name__,
 # API docs https://flask-restful.readthedocs.io/en/latest/api.html
 api = Api(job_api)
 
-'''
+
 @app.before_request
 def before_request():
     # Check if the request came from a specific origin
@@ -26,7 +26,7 @@ def before_request():
                           'https://aidanlau10.github.io/', 'http://127.0.0.1:4100/joblyFrontend/jobs/', 'http://localhost:4100/joblyFrontend/jobs/',
                           'https://aidanlau10.github.io/joblyFrontend/jobs/']:
         cors._origins = allowed_origin
-'''
+
 
 class JobAPI:        
     class _CRUD(Resource):  # User API operation for Create, Read.  THe Update, Delete methods need to be implemeented

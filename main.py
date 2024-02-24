@@ -1,10 +1,9 @@
-#from flask import render_template,request 
-from flask import render_template # import render_template from "public" flask libraries
+from flask import render_template,request  # import render_template from "public" flask libraries
 from flask.cli import AppGroup
 
 
 # import "packages" from "this" project
-from __init__ import app, db  # Definitions initialization
+from __init__ import app, db, cors  # Definitions initialization
 
 
 # setup APIs
@@ -52,9 +51,22 @@ def index():
 def table():
     return render_template("table.html")
     
+'''
+@app.after_request
+def after_request(response):
+    response.headers.add('Access-Control-Allow-Origin', 'http://127.0.0.1:4100/joblyFrontend/')
+    allowed_origins = ['http://127.0.0.1:4100/joblyFrontend/', 'https://aidanlau10.github.io/joblyFrontend/', 'https://aidanlau10.github.io/']
 
+    origin = request.headers.get('Origin')
+    if origin and origin in allowed_origins:
+        response.headers.add('Access-Control-Allow-Origin', origin)
 
-
+    response.headers.add('Access-Control-Allow-Origin', request.headers.get('Origin'))
+    response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
+    response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
+    response.headers.add('Access-Control-Allow-Credentials', 'true')
+    return response
+'''
 
 '''
 @app.before_request
