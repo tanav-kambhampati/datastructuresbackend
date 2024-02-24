@@ -68,7 +68,7 @@ def after_request(response):
     return response
 '''
 
-'''
+
 @app.before_request
 def before_request():
     # Check if the request came from a specific origin
@@ -77,7 +77,7 @@ def before_request():
                           'https://aidanlau10.github.io/', 'http://127.0.0.1:4100/joblyFrontend/jobs/', 'http://localhost:4100/joblyFrontend/jobs/',
                           'https://aidanlau10.github.io/joblyFrontend/jobs/', 'http://127.0.0.1:4100']:
         cors._origins = allowed_origin
-'''
+
 
 # Create an AppGroup for custom commands
 custom_cli = AppGroup('custom', help='Custom commands')
