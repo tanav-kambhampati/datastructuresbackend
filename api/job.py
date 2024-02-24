@@ -17,6 +17,7 @@ job_api = Blueprint('job_api', __name__,
 # API docs https://flask-restful.readthedocs.io/en/latest/api.html
 api = Api(job_api)
 
+'''
 @app.before_request
 def before_request():
     # Check if the request came from a specific origin
@@ -25,6 +26,8 @@ def before_request():
                           'https://aidanlau10.github.io/', 'http://127.0.0.1:4100/joblyFrontend/jobs/', 'http://localhost:4100/joblyFrontend/jobs/',
                           'https://aidanlau10.github.io/joblyFrontend/jobs/']:
         cors._origins = allowed_origin
+'''
+
 class JobAPI:        
     class _CRUD(Resource):  # User API operation for Create, Read.  THe Update, Delete methods need to be implemeented
         @token_required("Employer")
@@ -62,6 +65,7 @@ class JobAPI:
 
         # this method is when users click on specific job(say "IT Help"), and it will return information about it
         def get(self): # Read Method
+            '''
             print(request.url)
             frontendrequest = request.url
             parsed_url = urlparse(frontendrequest)
@@ -78,9 +82,10 @@ class JobAPI:
                 else:
                     return {'message': 'Job not found'}, 404
             else:
-                jobs = Job.query.all()    # read/extract all users from database
-                json_ready = [job.read() for job in jobs]  # prepare output in json
-                return jsonify(json_ready) # jsonify creates Flask response object, more specific to APIs than json.dumps
+            '''
+            jobs = Job.query.all()    # read/extract all users from database
+            json_ready = [job.read() for job in jobs]  # prepare output in json
+            return jsonify(json_ready) # jsonify creates Flask response object, more specific to APIs than json.dumps
 
                     
         @token_required("Employer")
