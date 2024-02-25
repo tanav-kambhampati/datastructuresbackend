@@ -136,7 +136,7 @@ class UserAPI:
 
                                 # domain="frontend.com"
                                 )
-                        resp.headers.add('Access-Control-Allow-Origin', request.headers.get('Origin'))
+                        resp.headers.add('Access-Control-Allow-Origin', 'http://localhost:4100/joblyFrontend/')
                        # resp.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
                         resp.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
                         resp.headers.add('Access-Control-Allow-Credentials', 'true')
