@@ -14,14 +14,14 @@ user_api = Blueprint('user_api', __name__,
 # API docs https://flask-restful.readthedocs.io/en/latest/api.html
 api = Api(user_api)
 
-'''
+
 @app.before_request
 def before_request():
     # Check if the request came from a specific origin
     allowed_origin = request.headers.get('Origin')
-    if allowed_origin in ['http://127.0.0.1:4100/joblyFrontend/', 'https://aidanlau10.github.io/joblyFrontend/', 'https://aidanlau10.github.io/']:
+    if allowed_origin in ['http://127.0.0.1:4100/joblyFrontend/', 'https://aidanlau10.github.io/joblyFrontend/', 'https://aidanlau10.github.io/', 'http://localhost:4100/joblyFrontend/']:
         cors._origins = allowed_origin
-'''
+
 class UserAPI:        
     class _CRUD(Resource):  # User API operation for Create, Read.  THe Update, Delete methods need to be implemeented
         #@token_required()
