@@ -50,7 +50,9 @@ def index():
 @app.route('/table/')  # connects /stub/ URL to stub() function
 def table():
     return render_template("table.html")
-    
+
+
+''' 
 @app.before_request
 def before_request():
     # Check if the request came from a specific origin
@@ -59,7 +61,7 @@ def before_request():
                           'https://aidanlau10.github.io/', 'http://127.0.0.1:4100/joblyFrontend/jobs/', 'http://localhost:4100/joblyFrontend/jobs/',
                           'https://aidanlau10.github.io/joblyFrontend/jobs/', 'http://127.0.0.1:4100']:
         cors._origins = allowed_origin
-
+'''
         
     
 
