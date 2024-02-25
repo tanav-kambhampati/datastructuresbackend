@@ -87,7 +87,11 @@ class JobAPI:
             '''
             jobs = Job.query.all()    # read/extract all users from database
             json_ready = [job.read() for job in jobs]  # prepare output in json
-            return jsonify(json_ready) # jsonify creates Flask response object, more specific to APIs than json.dumps
+            response = jsonify(json_ready) # jsonify creates Flask response object, more specific to APIs than json.dumps
+            response.headers.add("Access-Control-Allow-Origin", ['http://127.0.0.1:4100/joblyFrontend/', 'http://localhost:4100/joblyFrontend/', 'https://aidanlau10.github.io/joblyFrontend/', 
+                          'https://aidanlau10.github.io/', 'http://127.0.0.1:4100/joblyFrontend/jobs/', 'http://localhost:4100/joblyFrontend/jobs/',
+                          'https://aidanlau10.github.io/joblyFrontend/jobs/', 'http://127.0.0.1:4100'])
+            return response
 
                     
         @token_required("Employer")
