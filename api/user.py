@@ -131,10 +131,7 @@ class UserAPI:
 
                                 # domain="frontend.com"
                                 )
-                        resp.headers.add('Access-Control-Allow-Origin', 'http://localhost:4100/')
-                       # resp.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
-                        resp.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE')
-                        resp.headers.add('Access-Control-Allow-Credentials', 'true')
+                   
                         return resp
                     except Exception as e:
                         return {
