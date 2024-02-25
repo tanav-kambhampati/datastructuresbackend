@@ -58,7 +58,7 @@ class JobAPI:
 
         # this method is when users click on specific job(say "IT Help"), and it will return information about it
         def get(self): # Read Method
-            '''
+            
             print(request.url)
             frontendrequest = request.url
             parsed_url = urlparse(frontendrequest)
@@ -75,10 +75,9 @@ class JobAPI:
                 else:
                     return {'message': 'Job not found'}, 404
             else:
-            '''
-            jobs = Job.query.all()    # read/extract all users from database
-            json_ready = [job.read() for job in jobs]  # prepare output in json
-            return jsonify(json_ready) # jsonify creates Flask response object, more specific to APIs than json.dumps
+                jobs = Job.query.all()    # read/extract all users from database
+                json_ready = [job.read() for job in jobs]  # prepare output in json
+                return jsonify(json_ready) # jsonify creates Flask response object, more specific to APIs than json.dumps
 
                     
         @token_required("Employer")
