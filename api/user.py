@@ -15,12 +15,7 @@ user_api = Blueprint('user_api', __name__,
 api = Api(user_api)
 
 
-@app.before_request
-def before_request():
-    # Check if the request came from a specific origin
-    allowed_origin = request.headers.get('Origin')
-    if allowed_origin in ['http://localhost:4100/joblyFrontend/']:
-        cors._origins = allowed_origin
+
 
 class UserAPI:        
     class _CRUD(Resource):  # User API operation for Create, Read.  THe Update, Delete methods need to be implemeented
@@ -136,9 +131,9 @@ class UserAPI:
 
                                 # domain="frontend.com"
                                 )
-                        resp.headers.add('Access-Control-Allow-Origin', 'http://localhost:4100/joblyFrontend/')
+                        resp.headers.add('Access-Control-Allow-Origin', 'http://localhost:4100/')
                        # resp.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
-                        resp.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
+                        resp.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE')
                         resp.headers.add('Access-Control-Allow-Credentials', 'true')
                         return resp
                     except Exception as e:
