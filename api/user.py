@@ -19,7 +19,7 @@ api = Api(user_api)
 def before_request():
     # Check if the request came from a specific origin
     allowed_origin = request.headers.get('Origin')
-    if allowed_origin in ['http://127.0.0.1:4100/joblyFrontend/', 'https://aidanlau10.github.io/joblyFrontend/', 'https://aidanlau10.github.io/', 'http://localhost:4100/joblyFrontend/']:
+    if allowed_origin in ['http://localhost:4100/joblyFrontend/']:
         cors._origins = allowed_origin
 
 class UserAPI:        
