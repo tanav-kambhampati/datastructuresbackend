@@ -15,9 +15,7 @@ These object can be used throughout project.
 # Setup of key Flask object (app)
 app = Flask(__name__)
 
-cors = CORS(app, supports_credentials=True, methods=["GET", "POST", "PUT", "DELETE"], origins=['http://127.0.0.1:4100/joblyFrontend/', 'http://localhost:4100/joblyFrontend/', 'https://aidanlau10.github.io/joblyFrontend/', 
-                          'https://aidanlau10.github.io/', 'http://127.0.0.1:4100/joblyFrontend/jobs/', 'http://localhost:4100/joblyFrontend/jobs/',
-                          'https://aidanlau10.github.io/joblyFrontend/jobs/', 'http://127.0.0.1:4100'])
+cors = CORS(app, supports_credentials=True, methods=["GET", "POST", "PUT", "DELETE"])
 
 
     
