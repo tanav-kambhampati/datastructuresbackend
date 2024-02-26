@@ -119,10 +119,15 @@ class JobUserAPI:
                 jobs = [db.session.query(Job).filter(Job.id == job).first() for job in jobs_id]
                 return jsonify([job.read() for job in jobs])
             elif user.status == "Employer": # if user.status is employer
-                jobs_id = set([jobuser.jobid for jobuser in db.session.query(JobUser).filter(JobUser.userid == request.args.get("userid")).all()])
-                jobs = [db.session.query(Job).filter(Job.id == job).first() for job in jobs_id]
-                return jsonify([job.read() for job in jobs])
-
+                jobpostee = Job.query.filter_by(_jobpostee=request.args.get("userid")).all()
+                # get employer id, read all jobs they posted. posted from jobs
+                return jsonify([job.read() for job in jobpostee])
+            
+    class _whoApplied(Resource):
+        def get(self):
+            users_id = set([jobuser.userid for jobuser in db.session.query(JobUser).filter(JobUser.jobid == request.args.get("id")).all()])
+            users = [db.session.query(User).filter(User.id == user).first() for user in users_id]
+            return jsonify([user.read() for user in users])
     
 
             
@@ -130,6 +135,7 @@ class JobUserAPI:
     api.add_resource(_CRUD, '/')
     api.add_resource(_ApplyCount, '/applycount')
     api.add_resource(_Profile, '/profile')
+    api.add_resource(_whoApplied, '/whoapplied')
 
     
     

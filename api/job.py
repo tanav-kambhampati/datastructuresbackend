@@ -36,21 +36,23 @@ class JobAPI:
             pay = body.get('pay')
             field = body.get('field')
             location = body.get('location')
+            jobpostee = body.get('jobpostee')
     
             ''' #1: Key code block, setup USER OBJECT '''
-            uo = Job(title=title, 
+            jo = Job(title=title, 
                       description=description,
                       qualification=qualification,
                       pay=pay,
                       field=field,
-                      location=location)
+                      location=location,
+                      jobpostee=jobpostee)
 
 
             ''' #2: Key Code block to add user to database '''
             # create user in database
-            user = uo.create()
+            job = jo.create()
             # success returns json of user
-            if user:
+            if job:
                 return jsonify(title)
 
             # failure returns error
@@ -158,7 +160,7 @@ class JobAPI:
                         "error": str(e),
                         "data": None
                 }, 500
-
+   
             
     # building RESTapi endpoint
     api.add_resource(_CRUD, '/')

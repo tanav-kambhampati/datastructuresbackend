@@ -30,10 +30,12 @@ app.register_blueprint(job_api)
 app.register_blueprint(jobuser_api)
 app.register_blueprint(app_projects) # register app pages
 
+'''
 with app.app_context():
     initUsers()
     initJobs()
     initJobsUsers()
+'''
 
 @app.errorhandler(404)  # catch for URL not found
 def page_not_found(e):

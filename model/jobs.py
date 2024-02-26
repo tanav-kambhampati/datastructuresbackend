@@ -27,20 +27,20 @@ class Job(db.Model):
     _location = db.Column(db.String(255), unique=False, nullable=False)
     _qualification = db.Column(db.String(255), unique=False, nullable=False)
     _pay = db.Column(db.Integer, unique=False, nullable=False)
-    _role = db.Column(db.String(20), default="Unknown", nullable=False)
+    _jobpostee = db.Column(db.Integer, db.ForeignKey('users.id'))
     
-    users = db.relationship('JobUser', backref='jobs', uselist=True, lazy='dynamic')
+    jobs = db.relationship('JobUser', backref='jobs', uselist=True, lazy='dynamic')
 
     
     # constructor of a job object, initializes the instance variables within object (self)
-    def __init__(self, title, description, field="IT", location="On-site", qualification="Masters", pay=1000, role="Unknown"):
+    def __init__(self, title, description, field="IT", location="On-site", qualification="Masters", pay=1000, jobpostee=1):
         self._title = title    # variables with self prefix become part of the object, 
         self._description = description
         self._field = field
         self._location = location
         self._qualification = qualification
         self._pay = pay
-        self._role = role
+        self._jobpostee = jobpostee
 
     # a title getter method, extracts title from object
     @property
@@ -51,14 +51,9 @@ class Job(db.Model):
     @title.setter
     def title(self, title):
         self._title = title
+        
 
-    @property
-    def company(self):
-        return self._company
-    
-    @company.setter
-    def company(self, company):
-        self._company = company
+   
     # a getter method, extracts email from object
     @property
     def description(self):
@@ -112,12 +107,12 @@ class Job(db.Model):
         self._pay = pay
         
     @property
-    def role(self):
-        return self._role
+    def jobpostee(self):
+        return self._jobpostee
 
-    @role.setter
-    def role(self, role):
-        self._role = role
+    @jobpostee.setter
+    def jobpostee(self, jobpostee):
+        self._jobpostee = jobpostee
 
     # CRUD create/add a new record to the table
     # returns self or None on error
@@ -140,9 +135,9 @@ class Job(db.Model):
             "description": self.description,
             "field": self.field,
             "location": self.location,
-            "qualification": self._qualification,
-            "role": self.role,
+            "qualification": self.qualification,
             "pay": self.pay,
+            "jobpostee": self.jobpostee
             
             # "posts": [post.read() for post in self.posts]
         }
@@ -180,10 +175,10 @@ def initJobs():
         db.create_all()
         """Tester data for table"""
         jobs = [
-            Job(title='Software Engineer', description='Proficient experience in Java', field="Software", qualification="Mastes", location="Remote", pay=32, role="Employer"),
-            Job(title='Web Developer', description='Proficient experience in Node', field="Web", location="Remote", pay=30, role="Employer"),
-            Job(title='UX Designer', description='Proficient experience in React', field="Software", location="Remote", pay=25, role="Employer"),
-            Job(title='IT Technician', description='Proficient experience in computers', field="IT", location="On-site", pay=20, role="Employer")
+            Job(title='Software Engineer', description='Proficient experience in Java', field="Software", qualification="Mastes", location="Remote", pay=32, jobpostee=1),
+            Job(title='Web Developer', description='Proficient experience in Node', field="Web", location="Remote", pay=30),
+            Job(title='UX Designer', description='Proficient experience in React', field="Software", location="Remote", pay=25),
+            Job(title='IT Technician', description='Proficient experience in computers', field="IT", location="On-site", pay=2)
         ]
         
         for job in jobs:

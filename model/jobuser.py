@@ -43,7 +43,7 @@ class JobUser(db.Model):
         except IntegrityError:
             db.session.remove()
             return None
-    '''  
+    
     # CRUD read converts self to dictionary
     # returns dictionary
     def read(self):
@@ -56,7 +56,7 @@ class JobUser(db.Model):
             
             # "posts": [post.read() for post in self.posts]
         }
-    '''
+    
 
 # Builds working data for testing
 def initJobsUsers():
@@ -76,5 +76,3 @@ def initJobsUsers():
                 db.session.remove()
                 print(f"Records exist, duplicate title, or error: {job.title}")
 
-if __name__ == '__main__':
-    initJobsUsers()

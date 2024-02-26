@@ -85,7 +85,8 @@ class User(db.Model):
 
     # Defines a relationship between User record and Notes table, one-to-many (one user to many notes)
     users = db.relationship('JobUser', backref='users', uselist=True, lazy='dynamic')
-
+    jobpostees = db.relationship('Job', backref='users', uselist=True, lazy='dynamic')
+   
     # constructor of a User object, initializes the instance variables within object (self)
     def __init__(self, name, uid, password="123qwerty", dob=date.today(), status="unknown", hashmap={}, role="User"):
         self._name = name    # variables with self prefix become part of the object, 
