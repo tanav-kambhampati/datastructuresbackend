@@ -21,7 +21,7 @@ cors = CORS(app, supports_credentials=True, methods=["GET", "POST", "PUT", "DELE
     
 
 # Setup SQLAlchemy object and properties for the database (db)
-dbURI = 'sqlite:////volumes/sqlite.db'
+dbURI = 'sqlite:///volumes/sqlite.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_DATABASE_URI'] = dbURI
 SECRET_KEY = os.environ.get('SECRET_KEY') or 'SECRET_KEY'

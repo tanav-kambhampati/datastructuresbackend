@@ -149,9 +149,16 @@ class UserAPI:
                         "error": str(e),
                         "data": None
                 }, 500
+    class _Apply(Resource):
+        @token_required('Freelancer')
+        def get(self, current_user): # Read Method
+            users = User.query.all()    # read/extract all users from database
+            json_ready = [user.read() for user in users]  # prepare output in json
+            return jsonify(json_ready)  # jsonify creates Flask response object, more specific to APIs than json.dumps
 
             
     # building RESTapi endpoint
     api.add_resource(_CRUD, '/')
     api.add_resource(_Security, '/authenticate')
+    api.add_resource(_Apply, '/apply')
     

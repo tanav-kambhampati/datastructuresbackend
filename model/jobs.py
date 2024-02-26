@@ -3,7 +3,7 @@ from random import randrange
 from datetime import date
 import os, base64
 import json
-
+from .jobuser import JobUser
 from __init__ import app, db
 from sqlalchemy.exc import IntegrityError
 
@@ -28,7 +28,8 @@ class Job(db.Model):
     _qualification = db.Column(db.String(255), unique=False, nullable=False)
     _pay = db.Column(db.Integer, unique=False, nullable=False)
     _role = db.Column(db.String(20), default="Unknown", nullable=False)
-
+    
+    users = db.relationship('JobUser', backref='jobs', uselist=True, lazy='dynamic')
 
     
     # constructor of a job object, initializes the instance variables within object (self)

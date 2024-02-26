@@ -8,7 +8,7 @@ import random
 from __init__ import app, db, cors
 import flask
 from model.jobs import Job
-from model.jobusers import JobUsers
+from model.jobuser import JobUser
 from urllib import parse
 from urllib.parse import urlparse
 from urllib.parse import parse_qs
@@ -35,7 +35,7 @@ class JobUserAPI:
             userid = body.get('userid')
     
             ''' #1: Key code block, setup USER OBJECT '''
-            juo = JobUsers(jobid=jobid,
+            juo = JobUser(jobid=jobid,
                           userid=userid)
 
 
@@ -97,7 +97,7 @@ class JobUserAPI:
                 query_id = query_params['id'][0]
                 print('apply count')
                 print(query_id)
-                count = JobUsers.query.filter_by(_jobid=query_id).count()
+                count = JobUser.query.filter_by(jobid=query_id).count()
                 print(count)
                 if count:
                     return jsonify(count)
@@ -107,28 +107,29 @@ class JobUserAPI:
                 jobs = Job.query.all()    # read/extract all users from database
                 json_ready = [job.read() for job in jobs]  # prepare output in json
                 return jsonify(json_ready)
-    class _trackApplicant(Resource):
-        def post(self):
-            frontendrequest = request.url
-            parsed_url = urlparse(frontendrequest)
-            query_params = parse_qs(parsed_url.query)
-            if 'id' in query_params:
-                query_id = query_params['id'][0]
+    class _Profile(Resource):
+        def get(self):
+            user = User.query.filter_by(id=request.args.get("userid")).first()
+
+            if user is None:
+                return jsonify({"error": "User not found"})
                 
-                job = JobUsers.query.filter_by(id=query_id).first()
-                if job:
-                    json_ready = [jobs.read() for jobs in job]  # prepare output in json
-                    return jsonify(json_ready)
-                else:
-                    return {'message': 'Job not found'}, 404
-            else:
-                jobs = Job.query.all()    # read/extract all users from database
-                json_ready = [job.read() for job in jobs]  # prepare output in json
-                return jsonify(json_ready) # jsonify creates Flask response object, more specific to APIs than json.dumps
+            if user.status == "Freelancer":
+                jobs_id = set([jobuser.jobid for jobuser in db.session.query(JobUser).filter(JobUser.userid == request.args.get("userid")).all()])
+                jobs = [db.session.query(Job).filter(Job.id == job).first() for job in jobs_id]
+                return jsonify([job.read() for job in jobs])
+            elif user.status == "Employer": # if user.status is employer
+                jobs_id = set([jobuser.jobid for jobuser in db.session.query(JobUser).filter(JobUser.userid == request.args.get("userid")).all()])
+                jobs = [db.session.query(Job).filter(Job.id == job).first() for job in jobs_id]
+                return jsonify([job.read() for job in jobs])
+
+    
 
             
     # building RESTapi endpoint
     api.add_resource(_CRUD, '/')
     api.add_resource(_ApplyCount, '/applycount')
-    api.add_resource(_trackApplicant, '/trackapplicant')
+    api.add_resource(_Profile, '/profile')
+
+    
     
