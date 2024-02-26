@@ -129,6 +129,20 @@ class JobUserAPI:
             users = [db.session.query(User).filter(User.id == user).first() for user in users_id]
             return jsonify([user.read() for user in users])
     
+    class _userStatus(Resource):
+        def get(self):
+            user = User.query.filter_by(id=request.args.get("userid")).first()
+
+            if user is None:
+                return jsonify({"error": "User not found"})
+                
+            if user.status == "Freelancer":
+                return {'status': 'Freelancer',
+                    'name': f'{user._name}'}
+             
+            elif user.status == "Employer": # if user.status is employer
+                return {'status': 'Employer',
+                    'name': f'{user._name}'}
 
             
     # building RESTapi endpoint
@@ -136,6 +150,7 @@ class JobUserAPI:
     api.add_resource(_ApplyCount, '/applycount')
     api.add_resource(_Profile, '/profile')
     api.add_resource(_whoApplied, '/whoapplied')
+    api.add_resource(_userStatus, '/userstatus')
 
     
     
