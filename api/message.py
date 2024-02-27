@@ -1,5 +1,26 @@
 from flask import Flask, request, jsonify
 import sqlite3
+import json, jwt
+from flask import Blueprint, request, jsonify, current_app, Response
+from flask_restful import Api, Resource # used for REST API building
+from datetime import datetime
+from auth_middleware import token_required
+from model.users import User
+import random
+from __init__ import app, db, cors
+import flask
+from model.jobs import Job
+from model.jobuser import JobUser
+from urllib import parse
+from urllib.parse import urlparse
+from urllib.parse import parse_qs
+
+
+message_api = Blueprint('message_api', __name__,
+                   url_prefix='/api/message')
+
+# API docs https://flask-restful.readthedocs.io/en/latest/api.html
+api = Api(message_api)
 
 app = Flask(__name__)
 
