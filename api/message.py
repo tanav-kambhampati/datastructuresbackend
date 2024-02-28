@@ -14,7 +14,7 @@ from model.jobuser import JobUser
 from urllib import parse
 from urllib.parse import urlparse
 from urllib.parse import parse_qs
-
+from model.messages import Message
 
 
 # Replace "Message" with SQLAlchemy Message model.
