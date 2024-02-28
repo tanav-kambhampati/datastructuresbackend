@@ -18,6 +18,7 @@ from model.jobs import initJobs
 from model.jobuser import initJobsUsers
 from api.message import message_api
 from api.jobuser import jobuser_api
+from api.review import review_api
 # setup App pages
 from projects.projects import app_projects # Blueprint directory import projects definition
 
@@ -30,6 +31,7 @@ app.register_blueprint(message_api)
 app.register_blueprint(job_api)
 app.register_blueprint(jobuser_api)
 app.register_blueprint(app_projects) # register app pages
+app.register_blueprint(review_api)
 
 '''
 with app.app_context():
