@@ -12,7 +12,8 @@ from api.user import user_api # Blueprint import api definition
 from api.job import job_api
 # database migrations
 from model.users import initUsers
-
+from model.messages import initMessages
+from model.reviews import initReviews
 from model.jobs import initJobs
 from model.jobuser import initJobsUsers
 from api.message import message_api
@@ -75,10 +76,10 @@ custom_cli = AppGroup('custom', help='Custom commands')
 @custom_cli.command('generate_data')
 def generate_data():
     initUsers()
-
+    initMessages()
     initJobs()
     initJobsUsers()
-
+    initReviews()
 
 # Register the custom command group with the Flask application
 app.cli.add_command(custom_cli)

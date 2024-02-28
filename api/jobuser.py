@@ -20,8 +20,6 @@ api = Api(jobuser_api)
 
 
 
-
-
 class JobUserAPI:        
     class _CRUD(Resource):  # User API operation for Create, Read.  THe Update, Delete methods need to be implemeented
 

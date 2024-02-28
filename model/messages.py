@@ -29,6 +29,7 @@ class Message(db.Model):
         return self
     
 def initMessages():
+    print("Initialization messages")
     with app.app_context():
         """Create database and tables"""
         db.create_all()
