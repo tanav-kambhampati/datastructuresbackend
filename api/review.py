@@ -1,6 +1,6 @@
 from flask import Flask, request, jsonify, Blueprint
 from flask_restful import Api, Resource
-from __init__ import app, db
+from __init__ import app, db, cors
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 from model.reviews import Review
