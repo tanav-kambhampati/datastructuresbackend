@@ -8,13 +8,18 @@ import random
 from __init__ import app, db, cors
 import flask
 from model.jobs import Job
+from model.applications import Application
+from model.jobuser import JobUser
 from urllib import parse
 from urllib.parse import urlparse
 from urllib.parse import parse_qs
 
+
+
 job_api = Blueprint('job_api', __name__,
                    url_prefix='/api/job')
 
+...
 # API docs https://flask-restful.readthedocs.io/en/latest/api.html
 api = Api(job_api)
 
@@ -45,6 +50,7 @@ class JobAPI:
                       location=location,
                       jobpostee=jobpostee)
 
+        
 
             ''' #2: Key Code block to add user to database '''
             # create user in database
@@ -105,11 +111,69 @@ class JobAPI:
             # failure returns error
             return {'message': f'Processed {updatedJob}, format error'}, 400
 
-   
+    class _viewApplication(Resource):
+        def get(self):
+            application = Application.query.filter_by(jobid=request.args.get('jobid'), userid=request.args.get('userid')).first()
+
+            return jsonify(application.read())                                             
+    class _editApplication(Resource):
+        def put(self):
+            application = Application.query.filter_by(jobid=request.args.get('jobid'), userid=request.args.get('userid')).first()
             
+            body = request.get_json()
+            address = body.get('address')
+            email = body.get('email')
+            separationFactor = body.get('separationFactor')
+        
+
             
+            updatedApplication = application.update(address=address, email=email,separationFactor=separationFactor
+                                    )
+
+
+            # success returns json of user
+            if updatedApplication:
+                return jsonify(application.read())
+
+            # failure returns error
+            return {'message': f'Processed {updatedApplication}, format error'}, 400
+    class _submitApplication(Resource):
+        def post(self):
+            body = request.get_json()
+            
+            ''' Avoid garbage in, error checking '''
+            # validate name
+            address = body.get('address')
+            email = body.get('email')
+            separationFactor = body.get('separationFactor')
+            jobid = request.args.get('jobid')
+            userid = request.args.get('userid')
+    
+            ''' #1: Key code block, setup USER OBJECT '''
+            ao = Application(userid=userid,
+                             jobid=jobid,
+                             address=address,
+                             email=email,
+                             separationFactor=separationFactor)
+
+
+            juo = JobUser(jobid=jobid,
+                          userid=userid)
+            ''' #2: Key Code block to add user to database '''
+            # create user in database
+            juo.create()
+            application = ao.create()
+            # success returns json of user
+            if application:
+                return jsonify(ao.read())
+
+            # failure returns error
+            return {'message': f'Processed {email}, either a format error or User ID {address} is duplicate'}, 400
             
     # building RESTapi endpoint
     api.add_resource(_CRUD, '/')
     api.add_resource(_updateJob, '/updatejob')
+    api.add_resource(_viewApplication, '/viewapplication')
+    api.add_resource(_editApplication, '/editapplication')
+    api.add_resource(_submitApplication, '/submitapplication')
     

@@ -4,6 +4,7 @@ from datetime import date
 import os, base64
 import json
 from .jobuser import JobUser
+
 from __init__ import app, db
 from sqlalchemy.exc import IntegrityError
 
@@ -30,7 +31,7 @@ class Job(db.Model):
     _jobpostee = db.Column(db.Integer, db.ForeignKey('users.id'))
     
     jobs = db.relationship('JobUser', backref='jobs', uselist=True, lazy='dynamic')
-
+    applications = db.relationship('Application', backref='jobs', uselist=True, lazy='dynamic')
     
     # constructor of a job object, initializes the instance variables within object (self)
     def __init__(self, title, description, field="IT", location="On-site", qualification="Masters", pay=1000, jobpostee=1):
