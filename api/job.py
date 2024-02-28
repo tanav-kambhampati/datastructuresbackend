@@ -11,14 +11,12 @@ from model.jobs import Job
 from urllib import parse
 from urllib.parse import urlparse
 from urllib.parse import parse_qs
+
 job_api = Blueprint('job_api', __name__,
                    url_prefix='/api/job')
 
 # API docs https://flask-restful.readthedocs.io/en/latest/api.html
 api = Api(job_api)
-
-
-
 
 
 class JobAPI:        
