@@ -81,88 +81,37 @@ class JobAPI:
                 json_ready = [job.read() for job in jobs]  # prepare output in json
                 return jsonify(json_ready) # jsonify creates Flask response object, more specific to APIs than json.dumps
 
-                    
-        @token_required("Employer")
-        def delete(self, _): # Delete Method
-            body = request.get_json()
-            uid = body.get('uid')
-            user = User.query.filter_by(_uid=uid).first()
-            if user is None:
-                return {'message': f'User {uid} not found'}, 404
-            json = user.read()
-            user.delete() 
-            # 204 is the status code for delete with no json response
-            return f"Deleted user: {json}", 204 # use 200 to test with Postman
-            
-    
-    class _Security(Resource):
-        @token_required("Employer")
-        def get(self):
-            return jsonify('authorized')
-        def post(self):
-            try:
-                body = request.get_json()
-                if not body:
-                    return {
-                        "message": "Please provide user details",
-                        "data": None,
-                        "error": "Bad request"
-                    }, 400
-                ''' Get Data '''
-                uid = body.get('uid')
-                if uid is None:
-                    return {'message': f'User ID is missing'}, 400
-                password = body.get('password')
-                
-                ''' Find user '''
-                user = User.query.filter_by(_uid=uid).first()
-                if user is None or not user.is_password(password):
-                    return {'message': f"Invalid user id or password"}, 400
-                if user:
-                    try:
-                        token = jwt.encode(
-                            {"_uid": user._uid,
-                            "role": user.role},
-                            current_app.config["SECRET_KEY"],
-                            algorithm="HS256"
-                        )
-                        
-                        resp = jsonify({'message': f"Authentication for %s successful" % (user._uid)})
-                        resp.set_cookie("test", {"_uid": user._uid},
-                                        max_age=3600,
-                                secure=True,
-                                httponly=True,
-                                path='/',
-                                samesite='None')
-                        resp.set_cookie("jwt", token,
-                                max_age=3600,
-                                secure=True,
-                                httponly=True,
-                                path='/',
-                                samesite='None'  # This is the key part for cross-site requests
 
-                                # domain="frontend.com"
-                                )
-                        return resp
-                    except Exception as e:
-                        return {
-                            "error": "Something went wrong",
-                            "message": str(e)
-                        }, 500
-                return {
-                    "message": "Error fetching auth token!",
-                    "data": None,
-                    "error": "Unauthorized"
-                }, 404
-            except Exception as e:
-                return {
-                        "message": "Something went wrong!",
-                        "error": str(e),
-                        "data": None
-                }, 500
+
+    class _updateJob(Resource):
+        def put(self):
+            job = Job.query.filter_by(id=request.args.get("id")).first()
+            
+            body = request.get_json()
+            title = body.get('title')
+            description = body.get('description')
+            qualification = body.get('qualification')
+            pay = body.get('pay')
+            field = body.get('field')
+            location = body.get('location')
+
+            
+            updatedJob = job.update(title=title, description=description,qualification=qualification
+                                    ,pay=pay, field=field,location=location,   )
+
+
+            # success returns json of user
+            if updatedJob:
+                return jsonify(job.read())
+
+            # failure returns error
+            return {'message': f'Processed {updatedJob}, format error'}, 400
+
    
+            
+            
             
     # building RESTapi endpoint
     api.add_resource(_CRUD, '/')
-    api.add_resource(_Security, '/authenticate')
+    api.add_resource(_updateJob, '/updatejob')
     

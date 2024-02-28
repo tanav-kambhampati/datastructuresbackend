@@ -143,6 +143,7 @@ class JobUserAPI:
             elif user.status == "Employer": # if user.status is employer
                 return {'status': 'Employer',
                     'name': f'{user._name}'}
+    
 
             
     # building RESTapi endpoint

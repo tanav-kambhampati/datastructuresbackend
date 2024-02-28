@@ -146,14 +146,20 @@ class Job(db.Model):
 
     # CRUD update: updates job title, field, phone
     # returns self
-    def update(self, title="", description="", field=""):
+    def update(self, title="", description="", field="", location="", qualification="", pay=""):
         """only updates values with length"""
         if len(title) > 0:
-            self.title = title
+            self._title = title    # variables with self prefix become part of the object, 
         if len(description) > 0:
-            self.description = description
+            self._description = description
         if len(field) > 0:
-            self.set_field(field)
+            self._field = field
+        if len(location) > 0:
+            self._location = location
+        if len(qualification) > 0:
+            self._qualification = qualification
+        if pay is not None:
+            self._pay = pay
         db.session.commit()
         return self
 
