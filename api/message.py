@@ -36,37 +36,34 @@ class MessageAPI(Resource):
 api.add_resource(MessageAPI, '/')
 
 # Routes
-@app.route('/api/conversations', methods=['GET'])
-def get_conversations():
-    conversations = Message.query.with_entities(Message.conversation_id, Message.conversation_name).distinct().all()
-    return jsonify([{'id': conv[0], 'name': conv[1]} for conv in conversations])
+# @app.route('/api/conversations', methods=['GET'])
+# def get_conversations():
+#     conversations = Message.query.with_entities(Message.conversation_id, Message.conversation_name).distinct().all()
+#     return jsonify([{'id': conv[0], 'name': conv[1]} for conv in conversations])
 
-@app.route('/api/messages', methods=['GET'])
-def get_messages():
-    conversation_id = request.args.get('conversation_id')
-    if conversation_id:
-        messages = Message.query.filter_by(conversation_id=conversation_id).all()
-        return jsonify([{'content': msg.content} for msg in messages])
-    else:
-        return jsonify({'message': 'conversation_id is required'}), 400
+# @app.route('/api/messages', methods=['GET'])
+# def get_messages():
+#     conversation_id = request.args.get('conversation_id')
+#     if conversation_id:
+#         messages = Message.query.filter_by(conversation_id=conversation_id).all()
+#         return jsonify([{'content': msg.content} for msg in messages])
+#     else:
+#         return jsonify({'message': 'conversation_id is required'}), 400
 
-@app.route('/api/sendMessage', methods=['POST'])
-def send_message():
-    data = request.json
-    conversation_id = data.get('conversation_id')
-    content = data.get('content')
+# @app.route('/api/sendMessage', methods=['POST'])
+# def send_message():
+#     data = request.json
+#     conversation_id = data.get('conversation_id')
+#     content = data.get('content')
 
-    if conversation_id is None or content is None:
-        return jsonify({'message': 'conversation_id and content are required'}), 400
+#     if conversation_id is None or content is None:
+#         return jsonify({'message': 'conversation_id and content are required'}), 400
 
-    new_message = Message(conversation_id=conversation_id, content=content)
-    db.session.add(new_message)
-    db.session.commit()
+#     new_message = Message(conversation_id=conversation_id, content=content)
+#     new_message.create()
 
-    return jsonify({'message': 'Message sent successfully'}), 201
+#     return jsonify({'message': 'Message sent successfully'}), 201
 
-if __name__ == '__main__':
-    app.run(debug=True)
 
 
 
