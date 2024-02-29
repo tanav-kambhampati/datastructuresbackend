@@ -36,10 +36,10 @@ class ReviewAPI:
             # validate name
             rating = body.get('rating')
             comment = body.get('comment')
-            userid = request.args.get("userid")
+            userid = body.get("userid")
             
             ''' #1: Key code block, setup USER OBJECT '''
-            re = Review(userid=userid,
+            review = Review(userid=userid,
                         rating=rating,
                         comment=comment
                         )
@@ -47,13 +47,13 @@ class ReviewAPI:
 
             ''' #2: Key Code block to add user to database '''
             # create user in database
-            review = re.create()
+            review = review.create()
             # success returns json of user
             if review:
                 return jsonify(review.read())
 
             # failure returns error
-            return {'message': f'Processed {rating}, either a format error or User ID {comment} is duplicate'}, 400
+            return {'message': f'Error processing request'}, 400
 
         # this method is when users click on specific job(say "IT Help"), and it will return information about it
         def get(self): # Read Method
@@ -64,5 +64,3 @@ class ReviewAPI:
             
     # building RESTapi endpoint
     api.add_resource(_CRUD, '/')
-
-    
