@@ -13,8 +13,6 @@ from api.job import job_api
 # database migrations
 from model.users import initUsers
 from model.reviews import initReviews
-
-from model.messages import initMessages
 from model.jobs import initJobs
 from model.jobuser import initJobsUsers
 from api.message import message_api
@@ -79,7 +77,6 @@ custom_cli = AppGroup('custom', help='Custom commands')
 @custom_cli.command('generate_data')
 def generate_data():
     initUsers()
-    initMessages()
     initReviews()
     initJobs()
     initJobsUsers()
