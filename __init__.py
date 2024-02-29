@@ -5,7 +5,7 @@ from flask_migrate import Migrate
 import os
 from flask_cors import CORS
 from flask import request
-
+from flask_mail import Mail
 """
 These object can be used throughout project.
 1.) Objects from this file can be included in many blueprints
@@ -17,6 +17,15 @@ app = Flask(__name__)
 
 cors = CORS(app, supports_credentials=True, origins=["http://127.0.0.1:4100"] ,methods=["GET", "POST", "PUT", "DELETE"])
 
+
+app.config['MAIL_SERVER']='live.smtp.mailtrap.io'
+app.config['MAIL_PORT'] = 587
+app.config['MAIL_USERNAME'] = 'api'
+app.config['MAIL_PASSWORD'] = 'f3dec5cabae51b8e2af34e70f60fb146'
+app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_USE_SSL'] = False
+
+mail = Mail(app)
 
 # Setup SQLAlchemy object and properties for the database (db)
 dbURI = 'sqlite:///volumes/sqlite.db'

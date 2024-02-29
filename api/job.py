@@ -5,7 +5,7 @@ from datetime import datetime
 from auth_middleware import token_required
 from model.users import User
 import random
-from __init__ import app, db, cors
+from __init__ import app, db, cors, mail
 import flask
 from model.jobs import Job
 from model.applications import Application
@@ -13,7 +13,7 @@ from model.jobuser import JobUser
 from urllib import parse
 from urllib.parse import urlparse
 from urllib.parse import parse_qs
-
+from flask_mail import Message
 
 
 job_api = Blueprint('job_api', __name__,
@@ -169,11 +169,19 @@ class JobAPI:
 
             # failure returns error
             return {'message': f'Processed {email}, either a format error or User ID {address} is duplicate'}, 400
-            
+    class _sendMessage(Resource):
+        def get(self):
+            msg = Message(subject="Hello Aidan",
+                  sender="aidanlau10@gmail.com",
+                  recipients=["aidanlau10@gmail.com"])
+            msg.body = 'Test email'
+            mail.send(msg)
+            return "Message sent"
+        
     # building RESTapi endpoint
     api.add_resource(_CRUD, '/')
     api.add_resource(_updateJob, '/updatejob')
     api.add_resource(_viewApplication, '/viewapplication')
     api.add_resource(_editApplication, '/editapplication')
     api.add_resource(_submitApplication, '/submitapplication')
-    
+    api.add_resource(_sendMessage, '/sendmessage')
