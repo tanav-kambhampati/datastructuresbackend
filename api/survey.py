@@ -22,8 +22,9 @@ class SurveyAPI:
             problemSolving = body['problemSolving']
             showOff = body['showOff']
             teamPlayer = body['teamPlayer']
-            jobsuggested = ''
             
+            job_suggested = suggest_job(independent, artisticTalent, communicationSkills, fastTyper, handyPerson, problemSolving, showOff, teamPlayer)
+            print(job_suggested)
             survey = Survey(
                 independent=independent,
                 artisticTalent=artisticTalent,
@@ -33,21 +34,14 @@ class SurveyAPI:
                 problemSolving = problemSolving,
                 showOff = showOff,
                 teamPlayer = teamPlayer,
-                jobsuggested=jobsuggested
-                
+                jobsuggested=job_suggested
             )
             survey = survey.create()
             
             if survey:
                 return jsonify(survey.read())
 
-            # failure returns error
             return {'message': f'Error processing request'}, 400
-            
-                
-            #job_reco = "Artist"
-            
-            
             
         def get(self):
             surveys = surveys.query.all()    # read/extract all users from database
@@ -56,3 +50,32 @@ class SurveyAPI:
 
     # building RESTapi endpoint
     api.add_resource(_CRUD, '/')
+def suggest_job(independent, artistic_talent, communication_skills, fastTyper, handy_person, problem_solving, show_off, team_player):
+    job_suggested = "None"  
+
+    # Conditions based on survey responses
+    if independent == 'Yes' and artistic_talent == 'Yes':
+        job_suggested = "Graphic Designer"
+    elif artistic_talent == 'Yes' and communication_skills == 'Yes':
+        job_suggested = "Multimedia Artist"
+    elif fastTyper == 'Yes' and handy_person == 'Yes':
+        job_suggested = "Virtual Assistant"
+    elif problem_solving == 'Yes' and show_off == 'Yes':
+        job_suggested = "Social Media Influencer"
+    elif team_player == 'Yes' and communication_skills == 'Yes':
+        job_suggested = "Public Relations Specialist"
+    elif communication_skills == 'Yes':
+        job_suggested = "Communications Specialist"
+    elif fastTyper == 'Yes':
+        job_suggested = "Data Entry Clerk"
+    elif handy_person == 'Yes':
+        job_suggested = "Maintenance Technician"
+    elif problem_solving == 'Yes':
+        job_suggested = "Problem Solver"
+    elif show_off == 'Yes':
+        job_suggested = "Salesperson"
+    elif team_player == 'Yes':
+        job_suggested = "Team Coordinator"
+    
+    return job_suggested
+
