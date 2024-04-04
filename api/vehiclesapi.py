@@ -5,30 +5,28 @@ from model.vehiclesmodel import OneHotEncoder as enc
 from sklearn.linear_model import LogisticRegression
 import pandas as pd
 
-# Import the FootballScoreModel class
-
-rocketsuccess_api = Blueprint('rocketsuccess_', __name__, url_prefix='/api/rocketsuccess')
-api = Api(rocketsuccess_api)
+vechicles_api = Blueprint('vehicles', __name__, url_prefix='/api/vehicles')
+api = Api(vechicles_api)
 
 # payload_mass,origin_country,company,engine_strength,success_rate
 
 dt = dt  # Assuming dt is already trained
 enc = enc  # Assuming enc is already initialized and fitted
-class RocketSucessAPI(Resource):
+class VehiclesAPI(Resource):
 
     def __init__(self):
-        rocket_data = pd.read_csv('rocket_launch_data.csv')
-        td = rocket_data.copy()
+        carsalarydata = pd.read_csv('carsalarydata.csv')
+        td = carsalarydata.copy()
 
         self.logreg = LogisticRegression(max_iter=1000)
-        X = td.drop('success_rate', axis=1)
-        y = td['success_rate']
+        X = td.drop('Affordability', axis=1)
+        y = td['Affordability']
         self.logreg.fit(X, y)
 
-    def predict_rocket_success(payload_mass, company, engine_strength):
+    def vehicles(Salary):
         try:
             # Preprocess the input data
-            data = pd.DataFrame({'payload_mass': [payload_mass], 'company': [company], 'engine_strength': [engine_strength]})
+            data = pd.DataFrame({'Salary': [Salary]})
             encoded_data = enc.transform(data)
             
             # Make predictions
@@ -42,9 +40,9 @@ class RocketSucessAPI(Resource):
     def post(self):
         try:
             data = request.json
-            result = self.predict_rocket_success(data)
+            result = self.vehicles(data)
             return jsonify(result)
         except Exception as e:
             return jsonify({'error': str(e)})
         
-api.add_resource(RocketSucessAPI, '/predict')
+api.add_resource(VehiclesAPI, '/predict')

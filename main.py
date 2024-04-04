@@ -16,10 +16,13 @@ from model.reviews import initReviews
 from model.jobs import initJobs
 from model.jobuser import initJobsUsers
 from model.surveys import initSurveys
+from model.cars import initCars
 from api.message import message_api
 from api.jobuser import jobuser_api
 from api.review import review_api
 from api.survey import survey_api
+from api.car import car_api
+from api.vehiclesapi import vechicles_api
 
 # setup App pages
 from projects.projects import app_projects # Blueprint directory import projects definition
@@ -35,7 +38,8 @@ app.register_blueprint(jobuser_api)
 app.register_blueprint(app_projects) # register app pages
 app.register_blueprint(review_api)
 app.register_blueprint(survey_api)
-
+app.register_blueprint(car_api)
+app.register_blueprint(vechicles_api)
 '''
 with app.app_context():
     initUsers()
@@ -87,6 +91,7 @@ def generate_data():
     initJobs()
     initJobsUsers()
     initSurveys()
+    initCars
 
 # Register the custom command group with the Flask application
 app.cli.add_command(custom_cli)

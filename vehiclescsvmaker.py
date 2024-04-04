@@ -1,15 +1,15 @@
-import csv3
+import csv
 
-with open("rocket_launch_data.csv", mode = "w") as csvfile:
-    fieldnames = ['payload_mass', 'origin_country', 'company', 'engine_strength', 'success_rate']
+with open("carsalarydata.csv", mode = "w") as csvfile:
+    fieldnames = ['Salary', 'Car', 'Affordability']
     writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
     writer.writeheader()
-    writer.writerow({"payload_mass": "50", "origin_country": "USA", "company": "NASA", "engine_strength": "37", "success_rate": "Success"})
-    writer.writerow({"payload_mass": "20", "origin_country": "USA", "company": "NASA", "engine_strength": "45", "success_rate": "Success"})
-    writer.writerow({"payload_mass": "74", "origin_country": "Taiwan", "company": "Firefly", "engine_strength": "56", "success_rate": "Failure"})
-    writer.writerow({"payload_mass": "23", "origin_country": "India", "company": "ISRO", "engine_strength": "32", "success_rate": "Failure"})
-    writer.writerow({"payload_mass": "438", "origin_country": "USA", "company": "SpaceX", "engine_strength": "41", "success_rate": "Failure"})
-    writer.writerow({"payload_mass": "2309", "origin_country": "USA", "company": "SpaceX", "engine_strength": "49", "success_rate": "Success"})
-    writer.writerow({"payload_mass": "24", "origin_country": "USA", "company": "SpaceX", "engine_strength": "33","success_rate": "Failure"})
-    writer.writerow({"payload_mass": "2", "origin_country": "India", "company": "ISRO", "engine_strength": "42","success_rate": "Success"})
+    writer.writerow({"Salary": "500,000", "Car": "Phantom", "Affordability": "True"})
+    writer.writerow({"Salary": "200,000", "Car": "Continental", "Affordability": "False"})
+    writer.writerow({"Salary": "740,000", "Car": "720s", "Affordability": "True"})
+    writer.writerow({"Salary": "230,000", "Car": "Roadster", "Affordability": "True"})
+    writer.writerow({"Salary": "438,000", "Car": "Quattroporte", "Affordability": "True"})
+    writer.writerow({"Salary": "139,000", "Car": "Chiron", "Affordability": "False"})
+    writer.writerow({"Salary": "840,000", "Car": "A8","Affordability": "True"})
+    writer.writerow({"Salary": "180,000", "Car": "Huracán", "Affordability": "False"})
    
