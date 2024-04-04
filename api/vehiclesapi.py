@@ -5,7 +5,7 @@ from model.vehiclesmodel import OneHotEncoder as enc
 from sklearn.linear_model import LogisticRegression
 import pandas as pd
 
-vechicles_api = Blueprint('vehicles', __name__, url_prefix='/api/vehicles')
+vechicles_api = Blueprint('vehicles_api', __name__, url_prefix='/api/vehicles')
 api = Api(vechicles_api)
 
 # payload_mass,origin_country,company,engine_strength,success_rate
@@ -40,7 +40,7 @@ class VehiclesAPI(Resource):
     def post(self):
         try:
             data = request.json
-            result = self.vehicles(data)
+            result = self.vehicles(data["Salary"])
             return jsonify(result)
         except Exception as e:
             return jsonify({'error': str(e)})
