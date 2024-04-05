@@ -17,6 +17,7 @@ from model.jobs import initJobs
 from model.jobuser import initJobsUsers
 from model.surveys import initSurveys
 from model.cars import initCars
+from model.vehiclesmodel import initTitanic
 from api.message import message_api
 from api.jobuser import jobuser_api
 from api.review import review_api
@@ -82,7 +83,6 @@ custom_cli = AppGroup('custom', help='Custom commands')
 
 # Define a command to generate data
 
-
 @custom_cli.command('generate_data')
 def generate_data():
     print('In the generate data')
@@ -91,7 +91,9 @@ def generate_data():
     initJobs()
     initJobsUsers()
     initSurveys()
-    initCars
+    initCars()
+    initTitanic()
+
 
 # Register the custom command group with the Flask application
 app.cli.add_command(custom_cli)
